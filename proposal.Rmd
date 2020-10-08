@@ -5,16 +5,18 @@ date: "10/09/20"
 output: pdf_document
 ---
 
-### Section 1. Introduction
+### Setup
 
-```{r}
+```{r load-packages-data}
 library(tidyverse)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
+### Section 1. Introduction
+
 General research question: 
 
-What is the relationship between a subject's demographic attributes (gender, race, or age) and the likelihood of being stopped by police in traffic or receiving a traffic citation in Durham? 
+What is the relationship between a subject's demographic attributes (gender, race, or age) and the likelihood of being stopped by police in traffic in Durham? 
 
 ### Section 2. Data description
 
