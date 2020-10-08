@@ -1,11 +1,16 @@
 ---
 title: "Project proposal"
-author: "Team Name: Team member 1, Team member 2, Team member 3, Team member 4"
-date: "Update date"
+author: "Keohane sQUAD: Andrew Qin, Katie Nash, Bob Qian, and Chris Liang"
+date: "10/09/20"
 output: pdf_document
 ---
 
 ### Section 1. Introduction
+
+```{r}
+library(tidyverse)
+police <- read.csv("data/nc_durham_2020_04_01.csv")
+```
 
 ### Section 2. Data description
 
