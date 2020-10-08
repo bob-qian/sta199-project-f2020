@@ -12,6 +12,10 @@ library(tidyverse)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
+General research question: 
+
+What is the relationship between a subject's demographic attributes (gender, race, or age) and the likelihood of being stopped by police in traffic or receiving a traffic citation in Durham? 
+
 ### Section 2. Data description
 
 ### Section 3. Glimpse of data 
