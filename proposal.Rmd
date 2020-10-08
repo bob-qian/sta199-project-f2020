@@ -16,4 +16,8 @@ police <- read.csv("data/nc_durham_2020_04_01.csv")
 
 ### Section 3. Glimpse of data 
 
+```{r glimpse}
+glimpse(police)
+```
+
 
