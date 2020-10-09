@@ -22,6 +22,8 @@ Additionally, we will examine whether race, gender, or age are related to the ou
 
 ### Section 2. Data description
 
+The data set is a census of individual police stops in Durham created by the Stanford Open Policing project. It has `r ncol(police)` variables and `r nrow(police)` observations.
+
 Each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015.
 
 A categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop.
