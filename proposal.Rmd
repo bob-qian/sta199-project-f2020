@@ -18,6 +18,10 @@ In the wake of the election and the Black Lives Matter movement, we as the newes
 
 ### Section 2. Data description
 
+How they got the data:
+
+The data in this dataset was collected as part if the Stanford Open Policing Project which "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country"(https://openpolicing.stanford.edu/) According to the website, the Stanford Open Policing Project has compiled data from "21 state patrol agencies and 29 municipal police departments, comprising nearly 100 million traffic stops."(https://openpolicing.stanford.edu/findings/) One of the challenges which the website mentioned was the lack of information collected in traffic stops, and how they had to find states which track the data and release it in ways which can then be standardized.(https://openpolicing.stanford.edu/findings/)
+
 ### Section 3. Glimpse of data 
 
 ```{r glimpse}
