@@ -22,6 +22,16 @@ Additionally, we will examine whether race, gender, or age are related to the ou
 
 ### Section 2. Data description
 
+Each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015.
+
+A categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop.
+
+A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. 
+
+A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded.
+
+Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
+
 How they got the data:
 
 The data in this dataset was collected as part of the Stanford Open Policing Project which "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country"(https://openpolicing.stanford.edu/) According to the website, the Stanford Open Policing Project has compiled data from "21 state patrol agencies and 29 municipal police departments, comprising nearly 100 million traffic stops."(https://openpolicing.stanford.edu/findings/) One of the challenges which the website mentioned was the lack of information collected in traffic stops, and how they had to find states which track the data and release it in ways which can then be standardized.(https://openpolicing.stanford.edu/findings/)
