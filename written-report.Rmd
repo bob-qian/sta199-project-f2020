@@ -55,6 +55,7 @@ police %>%
   chisq_test(formula = citation_issued ~ subject_race)
 ```
 
+Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
 
 ## Discussion
 
