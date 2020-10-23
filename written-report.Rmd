@@ -1,6 +1,6 @@
 ---
-title: "Your project title"
-author: "Team Name: Team member 1, Team member 2, Team member 3, Team member 4"
+title: "Racial Disparities in Traffic Stops/Citations"
+author: "Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash"
 date: "Update date"
 output: pdf_document
 ---
