@@ -19,7 +19,8 @@ police <- read.csv("data/nc_durham_2020_04_01.csv")
 
 ```{r filter-data}
 police <- police %>% 
-  filter(subject_race != "unknown" & subject_race != "NA")
+  filter(subject_race != "unknown" & subject_race != "NA") %>% 
+  filter(subject_age != "NA")
 ```
 
 
@@ -42,9 +43,44 @@ sex~citation
 
 segmented bar graph w/ probability of citation based on race. 
 
+
+
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
-  geom_bar(position = "fill")
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Race", 
+       y = "Proportion", 
+       x = "Subject Race", 
+       fill = "Citation Issued")
+```
+
+```{r bargraph2}
+ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Sex", 
+       y = "Proportion", 
+       x = "Subject Sex", 
+       fill = "Citation Issued")
+```
+
+```{r age-cat}
+police <- police %>% 
+  mutate(age_cat = case_when(
+    subject_age <= 25 ~ "10-25", 
+    subject_age > 25 & subject_age <= 40 ~ "25-40", 
+    subject_age > 40 & subject_age <= 64 ~ "40-64", 
+    subject_age > 64 ~ "65 or older"
+  ))
+
+```
+
+```{r bargraph3}
+ggplot(police, aes(x = age_cat, fill = citation_issued)) + 
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Age", 
+       y = "Proportion", 
+       x = "Subject Age Category", 
+       fill = "Citation Issued")
 ```
 
 
@@ -53,6 +89,16 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
 ```{r chisq}
 police %>% 
   chisq_test(formula = citation_issued ~ subject_race)
+```
+
+```{r chisq2}
+police %>% 
+  chisq_test(formula = citation_issued ~ age_cat)
+```
+
+```{r chisq3}
+police %>% 
+  chisq_test(formula = citation_issued ~ subject_sex)
 ```
 
 
