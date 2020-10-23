@@ -17,6 +17,11 @@ library(infer)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
+```{r filter-data}
+police <- police %>% 
+  filter(subject_race != "unknown" & subject_race != "NA")
+```
+
 
 ## Introduction and Data
 
@@ -30,10 +35,17 @@ sex~citation
 
 segmented bar graph w/ probability of citation based on race. 
 
+```{r bargraph}
+ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
+  geom_bar(position = "fill")
+```
+
+
 ## Results
 
 ```{r chisq}
-
+police %>% 
+  chisq_test(formula = citation_issued ~ subject_race)
 ```
 
 
