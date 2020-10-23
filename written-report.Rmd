@@ -11,23 +11,33 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE)
 ```
 
+```{r read-data}
+library(tidyverse)
+library(infer)
+police <- read.csv("data/nc_durham_2020_04_01.csv")
+```
 
-***Introduction and Data***
+
+## Introduction and Data
 
 
 
-***Methodology***
+## Methodology
 
 race~citation
 age~citation
 sex~citation
 
 segmented bar graph w/ probability of citation based on race. 
-***Results***
+
+## Results
+
+```{r chisq}
+
+```
 
 
-
-***Discussion***
+## Discussion
 
 
 
