@@ -1,7 +1,7 @@
 ---
 title: "Racial Disparities in Traffic Stops/Citations"
 author: "Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash"
-date: "Update date"
+date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
@@ -23,7 +23,6 @@ police <- police %>%
   filter(subject_age != "NA")
 ```
 
-
 ## Introduction and Data
 
 Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country"(https://openpolicing.stanford.edu/). We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (such as sex or age) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (sex, race, or age) and the likelihood of being stopped by police in traffic in Durham? 
@@ -32,36 +31,12 @@ We hypothesize that race and the likelihood of being stopped by police in traffi
 
 Additionally, we will examine whether race, sex, or age are related to the outcome of the traffic stop (whether a citation will be issued). We hypothesize that race and the likelihood of receiving a citation are related, with black people more likely to receive a citation upon being stopped. We additionally hypothesize that younger people have a higher chance of receiving a citation upon being stopped and that sex has no significant relationship with being stopped in traffic.
 
-It has `r ncol(police)` variables and `r nrow(police)` observations, and each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015. A categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop.A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded. Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
+It has `r ncol(police)` variables and `r nrow(police)` observations, and each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015. A categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop. A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded. Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
 
 
 ## Methodology
 
-race~citation
-age~citation
-sex~citation
-
-segmented bar graph w/ probability of citation based on race. 
-
-
-
-```{r bargraph}
-ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
-  geom_bar(position = "fill") + 
-  labs(title = "Likelihood of Receiving Citation Based on Race", 
-       y = "Proportion", 
-       x = "Subject Race", 
-       fill = "Citation Issued")
-```
-
-```{r bargraph2}
-ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
-  geom_bar(position = "fill") + 
-  labs(title = "Likelihood of Receiving Citation Based on Sex", 
-       y = "Proportion", 
-       x = "Subject Sex", 
-       fill = "Citation Issued")
-```
+The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. We also mutate a new categorical variable `age_category` based on values of `subject_age` with the age categories "10-25", "25-40", "40-64", and "65 or older."
 
 ```{r age-cat}
 police <- police %>% 
@@ -74,6 +49,21 @@ police <- police %>%
 
 ```
 
+To begin with, we visualize a segmented bar graph with the probability of citation based on race below. 
+
+```{r bargraph}
+ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Race", 
+       y = "Proportion", 
+       x = "Subject Race", 
+       fill = "Citation Issued")
+```
+
+According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
+
+We also visualize a segmented bar graph with the probability of citation based on age below.
+
 ```{r bargraph3}
 ggplot(police, aes(x = age_cat, fill = citation_issued)) + 
   geom_bar(position = "fill") + 
@@ -83,6 +73,26 @@ ggplot(police, aes(x = age_cat, fill = citation_issued)) +
        fill = "Citation Issued")
 ```
 
+Based on this graph, it appears that there is a roughly equal proportion of citations issued to those in the 10-25 age group and 25-40 age group. The proportion of citations issued then begins to decrease in the next two age groups, with the citation proportion of the 40-64 age group being less than the previous groups' proportions and the 65 or older group's proportion being less than the 40-64 group's citation proportion.
+
+Lastly, we visualize a segmented bar graph with the probability of citation based on sex below.
+
+```{r bargraph2}
+ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Sex", 
+       y = "Proportion", 
+       x = "Subject Sex", 
+       fill = "Citation Issued")
+```
+
+Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
+
+To answer our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
+
+We perform three chi-square tests. For the first, we ask whether there is an association between someone's race status and whether a citation was issued. For the second, we ask whether there is an association between someone's age category and whether a citation was issued. For the third, we ask whether there is an association between someone's sex and whether a citation was issued.
+
+With each chi-square test, we compare observed versus the expected counts that we would expect if each $H_0$ were true. If these total differences are "large enough," then we reject the null hypothesis. We will perform each chi-square test at the $\alpha = 0.05$ significance level.
 
 ## Results
 
@@ -91,7 +101,6 @@ police %>%
   chisq_test(formula = citation_issued ~ subject_race)
 ```
 
-<<<<<<< HEAD
 ```{r chisq2}
 police %>% 
   chisq_test(formula = citation_issued ~ age_cat)
@@ -102,9 +111,7 @@ police %>%
   chisq_test(formula = citation_issued ~ subject_sex)
 ```
 
-=======
 Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
->>>>>>> 53ecaab072524d69fb1ef501f86cbd742b40efa0
 
 ## Discussion
 
