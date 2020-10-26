@@ -45,8 +45,6 @@ props <- police %>%
   mutate(O = "Observed")
 ```
 
-
-
 ```{r police-viz}
 police_viz <- read.table(text = "
 subject_race, proportion, O
@@ -56,7 +54,10 @@ hispanic, 0.137,Expected
 other, 0.009,Expected
 white, 0.43,Expected", 
 header = TRUE, sep = ",")
-                         
+
+# found help from https://stackoverflow.com/questions/16528167/how-to-combine-different-barplot-in-r
+# Census data - some overlap with the "Hispanic" ethnicity, as Hispanics can be any race, and the data didn't separate black non-Hispanics from black HIspanics.
+# Took out biracial people - not sure where they fitted in
 ```
 
 ```{r combine-data}
@@ -69,7 +70,7 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
   labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
-       fill = "Subject Race")
+       fill = "Subject Race") 
 ```
 
 The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. We also mutate a new categorical variable `age_category` based on values of `subject_age` with the age categories "10-25", "25-40", "40-64", and "65 or older."
@@ -78,8 +79,8 @@ The variables we use to address the research question are `subject_race`, `subje
 police <- police %>% 
   mutate(age_cat = case_when(
     subject_age <= 25 ~ "10-25", 
-    subject_age > 25 & subject_age <= 40 ~ "25-40", 
-    subject_age > 40 & subject_age <= 64 ~ "40-64", 
+    subject_age > 25 & subject_age <= 40 ~ "26-40", 
+    subject_age > 40 & subject_age <= 64 ~ "41-64", 
     subject_age > 64 ~ "65 or older"
   ))
 
@@ -132,16 +133,34 @@ With each chi-square test, we compare observed versus the expected counts that w
 
 ## Results
 
+Let $\rho$ equal the true 
+
+
+
+
 ```{r chisq}
 police %>% 
   chisq_test(formula = citation_issued ~ subject_race)
 ```
+
+We reject the null...
+Two things are associated...
+
+
+Investigate nature of association with logistic model
+
+Conditions (prob in methodology)
 
 ```{r logreg}
 logit_race <- glm(citation_issued ~ subject_race, data = police, 
                   family = "binomial")
 tidy(logit_race)
 ```
+
+BEing HIspanic associated with increased likelihood...
+Being black associated with lower likelihood of citation...
+
+Add age to logit model to see if it changes predictions
 
 
 ```{r chisq2}
@@ -154,9 +173,7 @@ police %>%
   chisq_test(formula = citation_issued ~ subject_sex)
 ```
 
-```{r}
-
-```
+Fail to reject null...
 
 ## Discussion
 
