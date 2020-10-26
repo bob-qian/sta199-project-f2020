@@ -102,11 +102,8 @@ police %>%
   chisq_test(formula = citation_issued ~ subject_sex)
 ```
 
-=======
-Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
->>>>>>> 53ecaab072524d69fb1ef501f86cbd742b40efa0
-
 ## Discussion
 
+Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
 
 
