@@ -70,7 +70,8 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
   labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
-       fill = "Subject Race") 
+       fill = "Subject Race") +
+  scale_fill_brewer()
 ```
 
 The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. We also mutate a new categorical variable `age_category` based on values of `subject_age` with the age categories "10-25", "25-40", "40-64", and "65 or older."
