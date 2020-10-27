@@ -134,29 +134,92 @@ With each chi-square test, we compare observed versus the expected counts that w
 
 ## Results
 
-Let $\rho$ equal the true 
+We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rate compared to their proportion within the Durham County population. We decided to check if this difference was statistically significant through the below test:
+
+Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
+
+$H_0: \rho = 0.369$. The true proportion of stopped drivers who were black within Durham County is equal to the true proportion of black people within Durham County (0.369).
+
+$H_A: \rho > 0,369$. The true proportion of stopped drivers who were black within Durham County is greater than the true proportion of black people within Durham County.
+
+$\alpha$ = 0.05
+
+Conditions:
+
+1. Independence of Outcomes - Although the 10% condition is not met (since the data is an attempted census), it is reasonable to assume that one traffic stop does not affect the likelihood of another traffic stop, meaning the outcomes are independent.
+
+2. Sample Size: `r nrow(police)` > 30.
+
+Conditions met. Proceed with a one-proportion t-test.
+
+```{r}
+police <- police %>% 
+  mutate(B = case_when(
+    subject_race == "black" ~ "B",
+    subject_race != "black" ~ "Not B"
+  ))
+
+counts <- police %>% 
+  count(B) 
+```
+
+```{r ttest}
+prop <- prop.test(x = 180711, n = 323147, p = 0.369, alternative = "greater")
+tidy(prop) %>% 
+  select(estimate:p.value)
+```
 
 
 
+We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
+
+$H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
+
+$H_A:$ Race and the likelihood of receiving a citation upon being stopped are associated.
+
+$\alpha$ = 0.05.
 
 ```{r chisq}
-police %>% 
+chi1 <- police %>% 
   chisq_test(formula = citation_issued ~ subject_race)
+chi1
 ```
 
-We reject the null...
-Two things are associated...
+The chi-squared test for independence outputted a statistic of `r round(chi1$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 4 degrees of freedom.
 
+Since our p-value of `r round(chi1$p_value, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
 
-Investigate nature of association with logistic model
+By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the exact nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. We also added age as a predictor on the model to control for the effect of age on citations.
 
-Conditions (prob in methodology)
+Conditions of Logistic Regression:
+
+1. Independence - Each traffic stop is independent of other traffic stops; one traffic stop resulting in a citation does not affect the likelihood that other traffic stops result in citations.
+
+2. Linearity - 
 
 ```{r logreg}
-logit_race <- glm(citation_issued ~ subject_race, data = police, 
+logit_race <- glm(citation_issued ~ subject_race + subject_age, data = police, 
                   family = "binomial")
-tidy(logit_race)
+probs <- predict(logit_race, type = "response")
+predicted <- ifelse(probs > 0.5, "citation", "no citation")
 ```
+
+```{r}
+data <- police %>% 
+  select(subject_age)
+predictors <- colnames(data)
+data <- data %>% 
+  mutate(logit = log(probs / (1 - probs))) %>% 
+  gather(key = "predictors", value = "predictor.value", -logit) %>% 
+  slice(1:1000)
+```
+
+```{r}
+ggplot(data, aes(x = logit, y = predictor.value)) + 
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = "loess")
+```
+
 
 BEing HIspanic associated with increased likelihood...
 Being black associated with lower likelihood of citation...
