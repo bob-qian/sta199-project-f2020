@@ -1,8 +1,8 @@
 ---
 title: "Racial Disparities in Traffic Stops/Citations"
-author: "Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash"
+author: 'Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash'
 date: "`r Sys.Date()`"
-output: "pdf_document"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -141,7 +141,7 @@ Let $\rho$ equal the true proportion of stopped drivers who were black within Du
 
 $H_0: \rho = 0.369$. The true proportion of stopped drivers who were black within Durham County is equal to the true proportion of black people within Durham County (0.369).
 
-$H_A: \rho > 0,369$. The true proportion of stopped drivers who were black within Durham County is greater than the true proportion of black people within Durham County.
+$H_A: \rho > 0.369$. The true proportion of stopped drivers who were black within Durham County is greater than the true proportion of black people within Durham County.
 
 $\alpha$ = 0.05
 
@@ -153,7 +153,7 @@ Conditions:
 
 Conditions met. Proceed with a one-proportion t-test.
 
-```{r}
+```{r mutate-count}
 police <- police %>% 
   mutate(B = case_when(
     subject_race == "black" ~ "B",
@@ -192,9 +192,9 @@ Since our p-value of `r round(chi1$p_value, 3)` is less than our alpha of 0.05, 
 
 We then tested if a driver's sex is associated with the likelihood of receiving a citation.
 
-$H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
+$H_0:$ Sex and the likelihood of receiving a citation upon being stopped are not associated.
 
-$H_A:$ Race and the likelihood of receiving a citation upon being stopped are associated.
+$H_A:$ Sex and the likelihood of receiving a citation upon being stopped are associated.
 
 $\alpha$ = 0.05.
 
@@ -280,7 +280,7 @@ This model yields a few key conclusions:
 
 2. Holding age constant, we expect the odds that a black person will receive a citation upon being stopped by police in Durham County to be `r exp(-0.202)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01).
 
-3. Holding race constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope ≠ 0).
+3. Holding race constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope  0).
 
 The implications of this model will be further discussed in the "Discussion" section of the report.
 
