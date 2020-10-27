@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = FALSE,
 ```{r read-data}
 library(tidyverse)
 library(infer)
+library(broom)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
@@ -169,7 +170,7 @@ tidy(prop) %>%
   select(estimate:p.value)
 ```
 
-
+...
 
 We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
 
@@ -189,53 +190,100 @@ The chi-squared test for independence outputted a statistic of `r round(chi1$sta
 
 Since our p-value of `r round(chi1$p_value, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
 
-By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the exact nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. We also added age as a predictor on the model to control for the effect of age on citations.
+We then tested if a driver's sex is associated with the likelihood of receiving a citation.
+
+$H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
+
+$H_A:$ Race and the likelihood of receiving a citation upon being stopped are associated.
+
+$\alpha$ = 0.05.
+
+```{r chisq2}
+chi2 <- police %>% 
+  chisq_test(formula = citation_issued ~ subject_sex)
+chi2
+```
+
+The chi-squared test for independence outputted a statistic of `r round(chi2$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 1 degree of freedom.
+
+Since our p-value of `r round(chi2$p_value, 3)` is greater than our alpha of 0.05, we fail to reject the null hypothesis. The data does not provide sufficient evidence to indicate that sex and the likelihood of receiving a citation upon being stopped are associated.
+
+By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the exact nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. We also added age as a predictor on the model to control for the effect of age on citations. However, we excluded sex from the model, as the above chi-squared test for independence indicated that the data does not provide a statistically significant association between a subject's sex and the likelihood of receiving a citation.
 
 Conditions of Logistic Regression:
 
 1. Independence - Each traffic stop is independent of other traffic stops; one traffic stop resulting in a citation does not affect the likelihood that other traffic stops result in citations.
 
-2. Linearity - 
+2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, faceting by race to isolate the linear predictor. The Linearity Assumption is met because there is a linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race in this context) are held constant.
+
+```{r mutatestuff}
+police1 <- police %>% 
+  mutate(subject_race = case_when(
+    subject_race == "white" ~ "1white", 
+    subject_race == "asian/pacific islander" ~ "asian/pacific islander", 
+    subject_race == "black" ~ "black", 
+    subject_race == "hispanic" ~ "hispanic", 
+    subject_race == "other" ~ "other", 
+  ))
+```
+
 
 ```{r logreg}
-logit_race <- glm(citation_issued ~ subject_race + subject_age, data = police, 
+logit_race <- glm(citation_issued ~ subject_race + subject_age, data = police1, 
                   family = "binomial")
 probs <- predict(logit_race, type = "response")
 predicted <- ifelse(probs > 0.5, "citation", "no citation")
 ```
 
-```{r}
+```{r linearity1}
 data <- police %>% 
-  select(subject_age)
+  select(subject_age, subject_race)
 predictors <- colnames(data)
 data <- data %>% 
   mutate(logit = log(probs / (1 - probs))) %>% 
-  gather(key = "predictors", value = "predictor.value", -logit) %>% 
-  slice(1:1000)
+  slice(1:1000) #sliced 1 to 1000 because anything more than 1000 data points would overload R. Linear trends still hold beyond data point 1000.
 ```
 
-```{r}
-ggplot(data, aes(x = logit, y = predictor.value)) + 
+```{r linearity2}
+ggplot(data, aes(x = logit, y = subject_age)) + 
+  facet_wrap(. ~ subject_race) +
   geom_point(alpha = 0.5) + 
-  geom_smooth(method = "loess")
+  geom_smooth(method = "loess") + 
+  theme_bw() + 
+  labs(title = "Subject Age vs Predicted Logits", 
+       subtitle = "Faceted by Race", 
+       x = "Predicted Logits", 
+       y = "Subject Age")
+
+# Found code for assumption check from http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/ 
 ```
 
+Conditions met. Proceed with a logistic regression model.
 
-BEing HIspanic associated with increased likelihood...
-Being black associated with lower likelihood of citation...
-
-Add age to logit model to see if it changes predictions
-
-
-```{r chisq2}
-police %>% 
-  chisq_test(formula = citation_issued ~ age_cat)
+```{r show-log}
+tidy(logit_race)
 ```
 
-```{r chisq3}
-police %>% 
-  chisq_test(formula = citation_issued ~ subject_sex)
-```
+The logistic regression model has outputted the following equations to predict the likelihood of receiving a citation:
+
+Predicted Citation Log-Odds = 0.393 + 0.004 * subject_raceasian/pacific islander - 0.007 * age
+
+Predicted Citation Log-Odds = 0.393 - 0.202 * subject_raceblack - 0.007 * age
+
+Predicted Citation Log-Odds = 0.393 + 0.359 * subject_racehispanic - 0.007 * age
+
+Predicted Citation Log-Odds = 0.393 - 0.143 * subject_raceother - 0.007 * age
+
+This model yields a few key conclusions:
+
+1. Holding age constant, we expect the odds that a Hispanic person will receive a citation upon being stopped by police in Durham County to be `r exp(.359)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01), meaning there is less than a 1% chance such a coefficient or more extreme would be found in the data if race and the likelihood of receiving a citation were not associated. 
+
+2. Holding age constant, we expect the odds that a black person will receive a citation upon being stopped by police in Durham County to be `r exp(-0.202)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01).
+
+3. Holding race constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope ≠ 0).
+
+The implications of this model will be further discussed in the "Discussion" section of the report.
+
 
 Fail to reject null...
 
