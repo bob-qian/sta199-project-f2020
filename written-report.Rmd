@@ -135,7 +135,15 @@ With each chi-square test, we compare observed versus the expected counts that w
 
 ## Results
 
-We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rate compared to their proportion within the Durham County population. We decided to check if this difference was statistically significant through the below test:
+```{r create-sample}
+set.seed(125)
+sample <- police %>% 
+  group_by(subject_race) %>% 
+  sample_frac(size = 0.01) %>% 
+  select(subject_race)
+```
+
+We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rates compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we crated a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
 
 Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
 
@@ -145,32 +153,39 @@ $H_A: \rho > 0.369$. The true proportion of stopped drivers who were black withi
 
 $\alpha$ = 0.05
 
-Conditions:
-
-1. Independence of Outcomes - Although the 10% condition is not met (since the data is an attempted census), it is reasonable to assume that one traffic stop does not affect the likelihood of another traffic stop, meaning the outcomes are independent.
-
-2. Sample Size: `r nrow(police)` > 30.
-
-Conditions met. Proceed with a one-proportion t-test.
-
 ```{r mutate-count}
-police <- police %>% 
+sample <- sample %>% 
   mutate(B = case_when(
     subject_race == "black" ~ "B",
     subject_race != "black" ~ "Not B"
   ))
-
-counts <- police %>% 
-  count(B) 
 ```
 
-```{r ttest}
-prop <- prop.test(x = 180711, n = 323147, p = 0.369, alternative = "greater")
-tidy(prop) %>% 
-  select(estimate:p.value)
+```{r simulate-null}
+null_dist1 <- sample %>% 
+  specify(response = B, success = "B") %>% 
+  hypothesize(null = "point", 
+              p = c("B" = 0.369, "Not B" = 0.631)) %>% 
+  generate(reps = 100, type = "simulate") %>% 
+  calculate(stat = "prop")
 ```
 
-...
+```{r obs-prop}
+obs_prop <- sample %>% 
+  specify(response = B, success = "B") %>% 
+  calculate(stat = "prop") %>% 
+  pull()
+```
+
+```{r calc-p-value}
+p <- null_dist1 %>% 
+  filter(stat >= obs_prop) %>% 
+  summarise(p = n()/nrow(null_dist1)) %>% 
+  pull()
+p
+```
+
+Because our p-value of `r round(p, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369).
 
 We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
 
@@ -197,6 +212,7 @@ $H_0:$ Sex and the likelihood of receiving a citation upon being stopped are not
 $H_A:$ Sex and the likelihood of receiving a citation upon being stopped are associated.
 
 $\alpha$ = 0.05.
+
 
 ```{r chisq2}
 chi2 <- police %>% 
@@ -260,9 +276,11 @@ ggplot(data, aes(x = logit, y = subject_age)) +
 
 Conditions met. Proceed with a logistic regression model.
 
-```{r show-log}
+
+```{r tidy-logit}
 tidy(logit_race)
 ```
+
 
 The logistic regression model has outputted the following equations to predict the likelihood of receiving a citation:
 
