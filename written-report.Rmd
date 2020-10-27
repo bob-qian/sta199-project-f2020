@@ -23,6 +23,7 @@ police <- police %>%
   filter(county_name == "Durham County") %>% 
   filter(subject_race != "unknown" & subject_race != "NA") %>% 
   filter(subject_age != "NA") 
+num_rep <- 100
 ```
 
 ## Introduction and Data
@@ -73,6 +74,35 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
        y = "Proportion", 
        fill = "Subject Race") +
   scale_fill_brewer()
+```
+
+```{r props2}
+props2 <- police %>% 
+  count(subject_sex) %>% 
+  mutate(proportion = n/sum(n)) %>% 
+  select(subject_sex, proportion) %>% 
+  mutate(O = "Observed")
+```
+
+```{r police-viz2}
+police_viz2 <- read.table(text = "
+subject_sex, proportion, O
+male, 0.477,Expected
+female, 0.523,Expected",
+header = TRUE, sep = ",")
+```
+
+```{r combine-data2}
+combined2 <- full_join(props2, police_viz2)
+```
+
+```{r stop-rate-viz2}
+ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Observed vs Expected Proportions of People Stopped by Sex", 
+       x = "Observed from Data vs Expected from 2010 Census",
+       y = "Proportion", 
+       fill = "Subject Sex") 
 ```
 
 The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. We also mutate a new categorical variable `age_category` based on values of `subject_age` with the age categories "10-25", "25-40", "40-64", and "65 or older."
@@ -166,7 +196,7 @@ null_dist1 <- sample %>%
   specify(response = B, success = "B") %>% 
   hypothesize(null = "point", 
               p = c("B" = 0.369, "Not B" = 0.631)) %>% 
-  generate(reps = 100, type = "simulate") %>% 
+  generate(reps = num_rep, type = "simulate") %>% 
   calculate(stat = "prop")
 ```
 
@@ -185,7 +215,52 @@ p <- null_dist1 %>%
 p
 ```
 
-Because our p-value of `r round(p, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369).
+Because our p-value of `r round(p, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369). This indicates that black people are disproportionately stopped at a higher rate.
+
+```{r create-sample2}
+set.seed(145)
+sample2 <- police %>% 
+  group_by(subject_sex) %>% 
+  sample_frac(size = 0.01) %>% 
+  select(subject_sex)
+```
+
+
+To investigate the second element of the research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test to determine if the difference between the observed and expected proportions is statistically significant.
+
+Let $\rho$ equal the true proportion of stopped drivers who were female within Durham County. 
+
+$H_0: \rho = 0.523$. The true proportion of stopped drivers who were female within Durham County is equal to the true proportion of female people within Durham County (0.523).
+
+$H_A: \rho < 0.523$. The true proportion of stopped drivers who were female within Durham County is not equal to the true proportion of female people within Durham County.
+
+$\alpha$ = 0.05
+
+```{r null-dist2}
+set.seed(300)
+null_dist2 <- sample2 %>% 
+  specify(response = subject_sex, success = "female") %>% 
+  hypothesize(null = "point", 
+              p = c("female" = 0.523, "male" = 0.477)) %>% 
+  generate(reps = num_rep, type = "simulate") %>% 
+  calculate(stat = "prop")
+```
+```{r obs-prop2}
+obs_prop2 <- sample2 %>% 
+  specify(response = subject_sex, success = "female") %>% 
+  calculate(stat = "prop") %>% 
+  pull()
+```
+```{r calc-pvalue}
+p2 <- null_dist2 %>% 
+  filter(stat <= obs_prop2) %>% 
+  summarise(p = n()/nrow(null_dist2)) %>% 
+  pull()
+p2
+```
+
+Because our p-value of `r round(p2, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger population.
+
 
 We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
 
@@ -224,13 +299,13 @@ The chi-squared test for independence outputted a statistic of `r round(chi2$sta
 
 Since our p-value of `r round(chi2$p_value, 3)` is greater than our alpha of 0.05, we fail to reject the null hypothesis. The data does not provide sufficient evidence to indicate that sex and the likelihood of receiving a citation upon being stopped are associated.
 
-By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the exact nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. We also added age as a predictor on the model to control for the effect of age on citations. However, we excluded sex from the model, as the above chi-squared test for independence indicated that the data does not provide a statistically significant association between a subject's sex and the likelihood of receiving a citation.
+By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the  nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. The logistic regression model has four variables to predict the log-odds of receiving a citation upon being stopped: The subject's race, the subject's age, the subject's sex, and an interaction variable between a subject's race and subject's sex (See Appendix 1 for the reasoning why this logistic regression model was chosen).
 
 Conditions of Logistic Regression:
 
 1. Independence - Each traffic stop is independent of other traffic stops; one traffic stop resulting in a citation does not affect the likelihood that other traffic stops result in citations.
 
-2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, faceting by race to isolate the linear predictor. The Linearity Assumption is met because there is a linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race in this context) are held constant.
+2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, faceting by race and coloring by sex to isolate the linear predictor. The Linearity Assumption is met because there is a linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race and sex in this context) are held constant.
 
 ```{r mutatestuff}
 police1 <- police %>% 
@@ -245,15 +320,16 @@ police1 <- police %>%
 
 
 ```{r logreg}
-logit_race <- glm(citation_issued ~ subject_race + subject_age, data = police1, 
-                  family = "binomial")
+logit_race <- glm(citation_issued ~ subject_race + subject_age + subject_sex +
+                    subject_race * subject_sex,
+                  data = police1, family = "binomial")
 probs <- predict(logit_race, type = "response")
 predicted <- ifelse(probs > 0.5, "citation", "no citation")
 ```
 
 ```{r linearity1}
 data <- police %>% 
-  select(subject_age, subject_race)
+  select(subject_age, subject_race, subject_sex)
 predictors <- colnames(data)
 data <- data %>% 
   mutate(logit = log(probs / (1 - probs))) %>% 
@@ -261,7 +337,7 @@ data <- data %>%
 ```
 
 ```{r linearity2}
-ggplot(data, aes(x = logit, y = subject_age)) + 
+ggplot(data, aes(x = logit, y = subject_age, color = subject_sex)) + 
   facet_wrap(. ~ subject_race) +
   geom_point(alpha = 0.5) + 
   geom_smooth(method = "loess") + 
@@ -269,7 +345,8 @@ ggplot(data, aes(x = logit, y = subject_age)) +
   labs(title = "Subject Age vs Predicted Logits", 
        subtitle = "Faceted by Race", 
        x = "Predicted Logits", 
-       y = "Subject Age")
+       y = "Subject Age", 
+       color = "Subject Sex")
 
 # Found code for assumption check from http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/ 
 ```
@@ -284,29 +361,97 @@ tidy(logit_race)
 
 The logistic regression model has outputted the following equations to predict the likelihood of receiving a citation:
 
-Predicted Citation Log-Odds = 0.393 + 0.004 * subject_raceasian/pacific islander - 0.007 * age
+Predicted Citation Log-Odds = 0.373 + 0.003 * subject_raceasian/pacific islander - 0.007 * age + 0.032 * male - 0.043 * subject_raceasian/pacific islander * male.
 
-Predicted Citation Log-Odds = 0.393 - 0.202 * subject_raceblack - 0.007 * age
+Predicted Citation Log-Odds = 0.373 - 0.127 * subject_raceblack - 0.007 * age + 0.032 * male - 0.121 * subject_raceblack * male.
 
-Predicted Citation Log-Odds = 0.393 + 0.359 * subject_racehispanic - 0.007 * age
+Predicted Citation Log-Odds = 0.373 + 0.357 * subject_racehispanic - 0.007 * age + 0.032 * male - 0.004 * subject_racehispanic * male.
 
-Predicted Citation Log-Odds = 0.393 - 0.143 * subject_raceother - 0.007 * age
+Predicted Citation Log-Odds = 0.373 - 0.253 * subject_raceother - 0.007 * age + 0.032 * male + 0.151 * subject_raceother * male.
+
 
 This model yields a few key conclusions:
 
-1. Holding age constant, we expect the odds that a Hispanic person will receive a citation upon being stopped by police in Durham County to be `r exp(.359)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01), meaning there is less than a 1% chance such a coefficient or more extreme would be found in the data if race and the likelihood of receiving a citation were not associated. 
+1. Holding age and sex constant, we expect the odds that a Hispanic person will receive a citation upon being stopped by police in Durham County to be `r exp(.357)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01), meaning there is less than a 1% chance such a coefficient or more extreme would be found in the data if race and the likelihood of receiving a citation were not associated. 
 
-2. Holding age constant, we expect the odds that a black person will receive a citation upon being stopped by police in Durham County to be `r exp(-0.202)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01).
+2. Holding age and sex constant, we expect the odds that a black person will receive a citation upon being stopped by police in Durham County to be `r exp(-0.127)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01).
 
-3. Holding race constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope  0).
+3. Holding race and sex constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope  0).
+
+4. Holding race and age constant, we expect the odds that a male person will receive a citation upon being stopped by police in Durham County to be `r exp(0.03228)` times the odds that a female person will receive a citation upon being stopped. This coefficient, however, is not statistically signifiacnt (p-value > 0.01).
+
+5. In most cases, the interaction variable between sex and race does not result in a statistically significant coefficient, the critical exception being the case of black people. Holding age and race constant, upon being stopped, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676 + 0.032)` times the odds that a black woman will receive a traffic citation upon being stopped (also factored in the nonsignificant "sex" variable by itself in odds calculation; without that coefficient, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676)` times the odds that a black woman will receive a citation upon being stopped). Thus, unlike nearly every other race listed, black people are the only race where women are statistically significantly more likely to receive a citation upon being stopped. 
 
 The implications of this model will be further discussed in the "Discussion" section of the report.
-
-
-Fail to reject null...
 
 ## Discussion
 
 Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
 
+Can't establish causation or isolate if it's because of discriminatory policing practices - only can note trends
 
+## Appendix 1
+
+This appendix is devoted to showing why we chose the logistic regression model that we did. Utilizing the demographic characteristics of sex, race, and age, we attempted to create the most robust and explanatory model possible from the data. Below are the calculated AIC and BIC values for each model we considered. The model with the lowest AIC and BIC values was the one we chose, as it had the followed the principle of Occam's Razor the most faithfully (it explained the most in the least complex manner).
+
+Logistic regression of purely subject race (BIC, then AIC):
+
+```{r aic1}
+logit_raceonly <- glm(citation_issued ~ subject_race, data = police, 
+                      family = "binomial")
+BIC(logit_raceonly)
+AIC(logit_raceonly)
+```
+
+Logistic regression of subject race and age (no interaction):
+
+```{r aic2}
+logit_race_age <- glm(citation_issued ~ subject_race + subject_age,
+                      data = police, family = "binomial")
+BIC(logit_race_age)
+AIC(logit_race_age)
+```
+
+Logistic Regression of Race, Sex, and Age: 
+
+```{r aic3}
+logit_race_sex <- glm(citation_issued ~ subject_race + subject_sex + 
+                        subject_age, data = police, family = "binomial")
+BIC(logit_race_sex)
+AIC(logit_race_sex)
+```
+
+Noting that the best logistic regression included all three variables (despite the fact that sex by itself is not significantly associated with the likelihood of receiving a citation), we tested interaction variables.
+
+Logistic Regression of Race, Sex, Age, and Race * Age:
+
+```{r aic4}
+logit_race_times_age <- glm(citation_issued ~ subject_race + subject_sex + 
+                        subject_age + subject_race * subject_age,
+                        data = police, family = "binomial")
+BIC(logit_race_times_age)
+AIC(logit_race_times_age)
+```
+
+BIC value increased, so we eliminated the interaction variable.
+
+Logistic Regression of Race, Sex, Age, and Age * Sex:
+
+```{r aic5}
+logit_age_times_sex <- glm(citation_issued ~ subject_race + subject_sex + 
+                        subject_age + subject_age * subject_sex,
+                        data = police, family = "binomial")
+BIC(logit_age_times_sex)
+AIC(logit_age_times_sex)
+```
+
+BIC again increased, so we eliminated the interaction variable.
+
+Logistic Regression of Race, Sex, Age, and Race * Sex:
+
+```{r aic6}
+BIC(logit_race)
+AIC(logit_race)
+```
+
+We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
