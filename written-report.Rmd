@@ -2,7 +2,7 @@
 title: "Racial Disparities in Traffic Stops/Citations"
 author: "Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: "pdf_document"
 ---
 
 ```{r setup, include=FALSE}
