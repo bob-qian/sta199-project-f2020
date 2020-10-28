@@ -449,11 +449,4 @@ BIC(logit_race)
 AIC(logit_race)
 ```
 
-<<<<<<< HEAD
-
-
-The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
-TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
-=======
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
->>>>>>> 104d7e5e32e12e856813129dbbba2e9c89640eb9
