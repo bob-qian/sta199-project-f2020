@@ -1,7 +1,7 @@
 ---
 title: "Racial Disparities in Traffic Stops/Citations"
-author: "Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash"
-date: "Update date"
+author: 'Keohane sQUAD: Chris Liang, Andrew Qin, Bob Qian, and Katie Nash'
+date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
@@ -14,51 +14,432 @@ knitr::opts_chunk$set(echo = FALSE,
 ```{r read-data}
 library(tidyverse)
 library(infer)
+library(broom)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
 ```{r filter-data}
 police <- police %>% 
-  filter(subject_race != "unknown" & subject_race != "NA")
+  filter(county_name == "Durham County") %>% 
+  filter(subject_race != "unknown" & subject_race != "NA") %>% 
+  filter(subject_age != "NA") 
+num_rep <- 100
 ```
-
 
 ## Introduction and Data
 
-Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country"(https://openpolicing.stanford.edu/). We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (such as sex or age) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (sex, race, or age) and the likelihood of being stopped by police in traffic in Durham? 
+Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country"(https://openpolicing.stanford.edu/). We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (primarily sex) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
 
-We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We hypothesize that younger people (roughly 18-30) have a disproportionately higher chance of being stopped in traffic (not necessarily due to bias but other lurking variables, such as inexperienced driving). We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data (http://censusviewer.com/city/NC/Durham). 
+We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data (https://www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI625219#RHI625219). 
 
 Additionally, we will examine whether race, sex, or age are related to the outcome of the traffic stop (whether a citation will be issued). We hypothesize that race and the likelihood of receiving a citation are related, with black people more likely to receive a citation upon being stopped. We additionally hypothesize that younger people have a higher chance of receiving a citation upon being stopped and that sex has no significant relationship with being stopped in traffic.
 
-It has `r ncol(police)` variables and `r nrow(police)` observations, and each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015. A categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop.A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded. Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
+The dataset has `r ncol(police)` variables and `r nrow(police)` observations, and each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015. A categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop. A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded. Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
 
 
 ## Methodology
 
-race~citation
-age~citation
-sex~citation
+```{r props}
+props <- police %>% 
+  count(subject_race) %>% 
+  mutate(proportion = n/sum(n)) %>% 
+  select(subject_race, proportion) %>% 
+  mutate(O = "Observed")
+```
 
-segmented bar graph w/ probability of citation based on race. 
+```{r police-viz}
+police_viz <- read.table(text = "
+subject_race, proportion, O
+asian/pacific islander, 0.056,Expected
+black, 0.369,Expected
+hispanic, 0.137,Expected
+other, 0.009,Expected
+white, 0.43,Expected", 
+header = TRUE, sep = ",")
+
+# found help from https://stackoverflow.com/questions/16528167/how-to-combine-different-barplot-in-r
+# Census data - some overlap with the "Hispanic" ethnicity, as Hispanics can be any race, and the data didn't separate black non-Hispanics from black HIspanics.
+# Took out biracial people - not sure where they fitted in
+```
+
+```{r combine-data}
+combined <- full_join(props, police_viz)
+```
+
+```{r stop-rate-viz}
+ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
+       x = "Observed from Data vs Expected from 2010 Census",
+       y = "Proportion", 
+       fill = "Subject Race") +
+  scale_fill_brewer()
+```
+
+```{r props2}
+props2 <- police %>% 
+  count(subject_sex) %>% 
+  mutate(proportion = n/sum(n)) %>% 
+  select(subject_sex, proportion) %>% 
+  mutate(O = "Observed")
+```
+
+```{r police-viz2}
+police_viz2 <- read.table(text = "
+subject_sex, proportion, O
+male, 0.477,Expected
+female, 0.523,Expected",
+header = TRUE, sep = ",")
+```
+
+```{r combine-data2}
+combined2 <- full_join(props2, police_viz2)
+```
+
+```{r stop-rate-viz2}
+ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Observed vs Expected Proportions of People Stopped by Sex", 
+       x = "Observed from Data vs Expected from 2010 Census",
+       y = "Proportion", 
+       fill = "Subject Sex") 
+```
+
+The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
+
+To begin with, we visualize a segmented bar graph with the probability of citation based on race below. 
 
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
-  geom_bar(position = "fill")
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Race", 
+       y = "Proportion", 
+       x = "Subject Race", 
+       fill = "Citation Issued")
 ```
 
+According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
+
+We then visualize a segmented bar graph with the probability of citation based on sex below.
+
+```{r bargraph2}
+ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
+  geom_bar(position = "fill") + 
+  labs(title = "Likelihood of Receiving Citation Based on Sex", 
+       y = "Proportion", 
+       x = "Subject Sex", 
+       fill = "Citation Issued")
+```
+
+Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
+
+ADD NULL DISTRIBUTION STUFF HERE (HOW DID WE SIMULATE)
+
+To answer our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
+
+We perform two chi-square tests. For the first, we ask whether there is an association between someone's race status and whether a citation was issued. For the second, we ask whether there is an association between someone's sex and whether a citation was issued.
+
+With each chi-square test, we compare observed versus the expected counts that we would expect if each $H_0$ were true. If these total differences are "large enough," then we reject the null hypothesis. We will perform each chi-square test at the $\alpha = 0.05$ significance level.
+
+ADD LOGISTIC REGRESSION STUFF HERE - how we investigate age's relationship to citation issued.
 
 ## Results
 
-```{r chisq}
-police %>% 
-  chisq_test(formula = citation_issued ~ subject_race)
+```{r create-sample}
+set.seed(125)
+sample <- police %>% 
+  group_by(subject_race) %>% 
+  sample_frac(size = 0.01) %>% 
+  select(subject_race)
+# Found code for sampling from https://stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame
+```
+
+We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rates compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we crated a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
+
+Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
+
+$H_0: \rho = 0.369$. The true proportion of stopped drivers who were black within Durham County is equal to the true proportion of black people within Durham County (0.369).
+
+$H_A: \rho > 0.369$. The true proportion of stopped drivers who were black within Durham County is greater than the true proportion of black people within Durham County.
+
+$\alpha$ = 0.05
+
+```{r mutate-count}
+sample <- sample %>% 
+  mutate(B = case_when(
+    subject_race == "black" ~ "B",
+    subject_race != "black" ~ "Not B"
+  ))
+```
+
+```{r simulate-null}
+set.seed(400)
+null_dist1 <- sample %>% 
+  specify(response = B, success = "B") %>% 
+  hypothesize(null = "point", 
+              p = c("B" = 0.369, "Not B" = 0.631)) %>% 
+  generate(reps = num_rep, type = "simulate") %>% 
+  calculate(stat = "prop")
+```
+```{r obs-prop}
+obs_prop <- sample %>% 
+  specify(response = B, success = "B") %>% 
+  calculate(stat = "prop") %>% 
+  pull()
+```
+
+```{r calc-p-value}
+p <- null_dist1 %>% 
+  filter(stat >= obs_prop) %>% 
+  summarise(p = n()/nrow(null_dist1)) %>% 
+  pull()
+p
+```
+
+Because our p-value of `r round(p, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369). This indicates that black people are disproportionately stopped at a higher rate.
+
+```{r create-sample2}
+set.seed(145)
+sample2 <- police %>% 
+  group_by(subject_sex) %>% 
+  sample_frac(size = 0.01) %>% 
+  select(subject_sex)
 ```
 
 
+To investigate the second element of the research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test to determine if the difference between the observed and expected proportions is statistically significant.
+
+Let $\rho$ equal the true proportion of stopped drivers who were female within Durham County. 
+
+$H_0: \rho = 0.523$. The true proportion of stopped drivers who were female within Durham County is equal to the true proportion of female people within Durham County (0.523).
+
+$H_A: \rho < 0.523$. The true proportion of stopped drivers who were female within Durham County is not equal to the true proportion of female people within Durham County.
+
+$\alpha$ = 0.05
+
+```{r null-dist2}
+set.seed(300)
+null_dist2 <- sample2 %>% 
+  specify(response = subject_sex, success = "female") %>% 
+  hypothesize(null = "point", 
+              p = c("female" = 0.523, "male" = 0.477)) %>% 
+  generate(reps = num_rep, type = "simulate") %>% 
+  calculate(stat = "prop")
+```
+```{r obs-prop2}
+obs_prop2 <- sample2 %>% 
+  specify(response = subject_sex, success = "female") %>% 
+  calculate(stat = "prop") %>% 
+  pull()
+```
+```{r calc-pvalue}
+p2 <- null_dist2 %>% 
+  filter(stat <= obs_prop2) %>% 
+  summarise(p = n()/nrow(null_dist2)) %>% 
+  pull()
+p2
+```
+
+Because our p-value of `r round(p2, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger population.
+
+
+We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
+
+$H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
+
+$H_A:$ Race and the likelihood of receiving a citation upon being stopped are associated.
+
+$\alpha$ = 0.05.
+
+```{r chisq}
+chi1 <- police %>% 
+  chisq_test(formula = citation_issued ~ subject_race)
+chi1
+```
+
+The chi-squared test for independence outputted a statistic of `r round(chi1$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 4 degrees of freedom.
+
+Since our p-value of `r round(chi1$p_value, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
+
+We then tested if a driver's sex is associated with the likelihood of receiving a citation.
+
+$H_0:$ Sex and the likelihood of receiving a citation upon being stopped are not associated.
+
+$H_A:$ Sex and the likelihood of receiving a citation upon being stopped are associated.
+
+$\alpha$ = 0.05.
+
+
+```{r chisq2}
+chi2 <- police %>% 
+  chisq_test(formula = citation_issued ~ subject_sex)
+chi2
+```
+
+The chi-squared test for independence outputted a statistic of `r round(chi2$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 1 degree of freedom.
+
+Since our p-value of `r round(chi2$p_value, 3)` is greater than our alpha of 0.05, we fail to reject the null hypothesis. The data does not provide sufficient evidence to indicate that sex and the likelihood of receiving a citation upon being stopped are associated.
+
+By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the  nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. The logistic regression model has four variables to predict the log-odds of receiving a citation upon being stopped: The subject's race, the subject's age, the subject's sex, and an interaction variable between a subject's race and subject's sex (See Appendix 1 for the reasoning why this logistic regression model was chosen).
+
+Conditions of Logistic Regression:
+
+1. Independence - Each traffic stop is independent of other traffic stops; one traffic stop resulting in a citation does not affect the likelihood that other traffic stops result in citations.
+
+2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, faceting by race and coloring by sex to isolate the linear predictor. The Linearity Assumption is met because there is a linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race and sex in this context) are held constant.
+
+```{r mutatestuff}
+police1 <- police %>% 
+  mutate(subject_race = case_when(
+    subject_race == "white" ~ "1white", 
+    subject_race == "asian/pacific islander" ~ "asian/pacific islander", 
+    subject_race == "black" ~ "black", 
+    subject_race == "hispanic" ~ "hispanic", 
+    subject_race == "other" ~ "other", 
+  ))
+```
+
+
+```{r logreg}
+logit_race <- glm(citation_issued ~ subject_race + subject_age + subject_sex +
+                    subject_race * subject_sex,
+                  data = police1, family = "binomial")
+probs <- predict(logit_race, type = "response")
+predicted <- ifelse(probs > 0.5, "citation", "no citation")
+```
+
+```{r linearity1}
+data <- police %>% 
+  select(subject_age, subject_race, subject_sex)
+predictors <- colnames(data)
+data <- data %>% 
+  mutate(logit = log(probs / (1 - probs))) %>% 
+  slice(1:1000) #sliced 1 to 1000 because anything more than 1000 data points would overload R. Linear trends still hold beyond data point 1000.
+```
+
+```{r linearity2}
+ggplot(data, aes(x = logit, y = subject_age, color = subject_sex)) + 
+  facet_wrap(. ~ subject_race) +
+  geom_point(alpha = 0.5) + 
+  geom_smooth(method = "loess") + 
+  theme_bw() + 
+  labs(title = "Subject Age vs Predicted Logits", 
+       subtitle = "Faceted by Race", 
+       x = "Predicted Logits", 
+       y = "Subject Age", 
+       color = "Subject Sex")
+
+# Found code for assumption check from http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/ 
+```
+
+Conditions met. Proceed with a logistic regression model.
+
+
+```{r tidy-logit}
+tidy(logit_race)
+```
+
+
+The logistic regression model has outputted the following equations to predict the likelihood of receiving a citation:
+
+Predicted Citation Log-Odds = 0.373 + 0.003 * subject_raceasian/pacific islander - 0.007 * age + 0.032 * male - 0.043 * subject_raceasian/pacific islander * male.
+
+Predicted Citation Log-Odds = 0.373 - 0.127 * subject_raceblack - 0.007 * age + 0.032 * male - 0.121 * subject_raceblack * male.
+
+Predicted Citation Log-Odds = 0.373 + 0.357 * subject_racehispanic - 0.007 * age + 0.032 * male - 0.004 * subject_racehispanic * male.
+
+Predicted Citation Log-Odds = 0.373 - 0.253 * subject_raceother - 0.007 * age + 0.032 * male + 0.151 * subject_raceother * male.
+
+
+This model yields a few key conclusions:
+
+1. Holding age and sex constant, we expect the odds that a Hispanic person will receive a citation upon being stopped by police in Durham County to be `r exp(.357)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01), meaning there is less than a 1% chance such a coefficient or more extreme would be found in the data if race and the likelihood of receiving a citation were not associated. 
+
+2. Holding age and sex constant, we expect the odds that a black person will receive a citation upon being stopped by police in Durham County to be `r exp(-0.127)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01).
+
+3. Holding race and sex constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope  0).
+
+4. Holding race and age constant, we expect the odds that a male person will receive a citation upon being stopped by police in Durham County to be `r exp(0.03228)` times the odds that a female person will receive a citation upon being stopped. This coefficient, however, is not statistically signifiacnt (p-value > 0.01).
+
+5. In most cases, the interaction variable between sex and race does not result in a statistically significant coefficient, the critical exception being the case of black people. Holding age and race constant, upon being stopped, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676 + 0.032)` times the odds that a black woman will receive a traffic citation upon being stopped (also factored in the nonsignificant "sex" variable by itself in odds calculation; without that coefficient, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676)` times the odds that a black woman will receive a citation upon being stopped). Thus, unlike nearly every other race listed, black people are the only race where women are statistically significantly more likely to receive a citation upon being stopped. 
+
+The implications of this model will be further discussed in the "Discussion" section of the report.
+
 ## Discussion
 
+Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
 
+Can't establish causation or isolate if it's because of discriminatory policing practices - only can note trends
 
+## Appendix 1
+
+This appendix is devoted to showing why we chose the logistic regression model that we did. Utilizing the demographic characteristics of sex, race, and age, we attempted to create the most robust and explanatory model possible from the data. Below are the calculated AIC and BIC values for each model we considered. The model with the lowest AIC and BIC values was the one we chose, as it had the followed the principle of Occam's Razor the most faithfully (it explained the most in the least complex manner).
+
+Meaning of AIC/BIC here: https://www.sciencedirect.com/topics/medicine-and-dentistry/akaike-information-criterion#:~:text=Akaike%20information%20criterion%20(AIC)%20(,among%20all%20the%20other%20models.&text=A%20lower%20AIC%20or%20BIC%20value%20indicates%20a%20better%20fit.
+
+Logistic regression of purely subject race (BIC, then AIC):
+
+```{r aic1}
+logit_raceonly <- glm(citation_issued ~ subject_race, data = police, 
+                      family = "binomial")
+BIC(logit_raceonly)
+AIC(logit_raceonly)
+```
+
+Logistic regression of subject race and age (no interaction):
+
+```{r aic2}
+logit_race_age <- glm(citation_issued ~ subject_race + subject_age,
+                      data = police, family = "binomial")
+BIC(logit_race_age)
+AIC(logit_race_age)
+```
+
+Logistic Regression of Race, Sex, and Age: 
+
+```{r aic3}
+logit_race_sex <- glm(citation_issued ~ subject_race + subject_sex + 
+                        subject_age, data = police, family = "binomial")
+BIC(logit_race_sex)
+AIC(logit_race_sex)
+```
+
+Noting that the best logistic regression included all three variables (despite the fact that sex by itself is not significantly associated with the likelihood of receiving a citation), we tested interaction variables.
+
+Logistic Regression of Race, Sex, Age, and Race * Age:
+
+```{r aic4}
+logit_race_times_age <- glm(citation_issued ~ subject_race + subject_sex + 
+                        subject_age + subject_race * subject_age,
+                        data = police, family = "binomial")
+BIC(logit_race_times_age)
+AIC(logit_race_times_age)
+```
+
+BIC value increased, so we eliminated the interaction variable.
+
+Logistic Regression of Race, Sex, Age, and Age * Sex:
+
+```{r aic5}
+logit_age_times_sex <- glm(citation_issued ~ subject_race + subject_sex + 
+                        subject_age + subject_age * subject_sex,
+                        data = police, family = "binomial")
+BIC(logit_age_times_sex)
+AIC(logit_age_times_sex)
+```
+
+BIC again increased, so we eliminated the interaction variable.
+
+Logistic Regression of Race, Sex, Age, and Race * Sex:
+
+```{r aic6}
+BIC(logit_race)
+AIC(logit_race)
+```
+
+<<<<<<< HEAD
 The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
 TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
+=======
+We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
+>>>>>>> 104d7e5e32e12e856813129dbbba2e9c89640eb9
