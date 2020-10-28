@@ -450,3 +450,48 @@ AIC(logit_race)
 ```
 
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
+
+## Appendix 2
+
+```{r line-graph1}
+library(lubridate)
+line <- police %>% 
+  filter(subject_race != "other", year(date) != 2001) %>% 
+  mutate(year = year(date))
+
+line <- line %>% 
+  group_by(year) %>% 
+  count(subject_race) %>% 
+  mutate(prop = n/sum(n)) 
+
+```
+
+```{r line-graph2}
+ggplot(line, aes(x = year, y = prop, color = subject_race)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Proportions of People Stopped in Traffic by Race over Time", 
+       x = "Year",
+       y = "Proportion of People Stopped in Traffic", 
+       color = "Subject Race") 
+```
+
+```{r line-graph3}
+line2 <- police %>% 
+  filter(year(date) != 2001) %>% 
+  mutate(year = year(date))
+
+line2 <- line2 %>% 
+  group_by(year) %>% 
+  count(subject_sex) %>% 
+  mutate(prop = n/sum(n)) 
+
+ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Proportions of People Stopped in Traffic by Sex over Time", 
+       x = "Year",
+       y = "Proportion of People Stopped in Traffic", 
+       color = "Subject Sex")
+```
+
