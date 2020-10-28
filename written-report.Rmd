@@ -366,22 +366,16 @@ This model yields a few key conclusions:
 The implications of this model will be further discussed in the "Discussion" section of the report.
 
 ## Discussion
- Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
- 
- 
- 
-Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. 
 
-We also learned that, when analyzing the likelihood of receiving a citation based on race, hispanics are the most likely to receive a traffic citation; however, blacks are disproportionately more likely to be stopped. 
+Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
-Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. 
+Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. It is unclear as to why this occurs because we only have observational data, which is limitation. All this provides evidence for is that Blacks are more likely to be stopped. This does not mean that police officers are racially profiling because there can be lurking variables. However, our data is consistent with past literature. 
 
-For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females.
+For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females. However, with our limitations it is unknown if there are any lurking or unknown variables. 
 
-Key limitation: can't isolate why this occurs, only obserational
+The Stanford policing project separated races differently than the census data As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
-However, due to our lack of complete data for the surrounding areas we are unable to establish if this trend is due to causation or if it is due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
-
+We are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
 
 ## Appendix 1
 
