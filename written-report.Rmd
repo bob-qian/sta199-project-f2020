@@ -88,7 +88,23 @@ combined2 <- full_join(props2, police_viz2)
 
 The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
 
-To begin with, we use census data to compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham.
+To begin with, we calculate summary statistics for stop rate based on race in 2010:
+
+```{r stop-rate}
+durham_population <- data.frame(subject_race = c("asian/pacific islander", "black", "hispanic", "other", "white"), population = round(c(0.056 *270001, 0.369* 270001, 0.137*270001, 0.009*270001, 0.43*270001)))
+
+stop_rate <- police %>% 
+  filter(year(date) == 2010) %>%
+  count(subject_race) %>%
+  left_join(durham_population) %>%
+  mutate(stop_rate = n / population)
+
+stop_rate
+```
+
+From the table, it appears that black people have the highest stop rate among races in Durham in 2010. This rate is 2.5 times higher than the rate for white people in Durham in 2010.
+
+Then, we use census data to compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham.
 
 ```{r stop-rate-viz}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
@@ -457,11 +473,7 @@ BIC(logit_race)
 AIC(logit_race)
 ```
 
-<<<<<<< HEAD
-
-
 The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
 TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
-=======
+
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
->>>>>>> 104d7e5e32e12e856813129dbbba2e9c89640eb9
