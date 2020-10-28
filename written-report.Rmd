@@ -393,13 +393,13 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
-Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. It is unclear as to why this occurs because we only have observational data, which is limitation. All this provides evidence for is that Blacks are more likely to be stopped. This does not mean that police officers are racially profiling because there can be lurking variables. However, our data is consistent with past literature. 
+We have also learned that Black people are disproportionately more likely to be stopped for a traffic violation, however, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is limitation. All this provides is evidence for is that Blacks are more likely to be stopped. This does not necessarily mean that police officers are racially profiling because there can be lurking variables. However, our data is consistent with past literature. 
 
 For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females. However, with our limitations it is unknown if there are any lurking or unknown variables. 
 
 The Stanford policing project separated races differently than the census data As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
-We are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
+One of our biggest limitations is that we are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
 
 ## Appendix 1
 
