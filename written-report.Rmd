@@ -178,7 +178,7 @@ sample <- police %>%
 # Found code for sampling from https://stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame
 ```
 
-We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rates compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we crated a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
+We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rates compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we created a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
 
 Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
 
@@ -220,7 +220,7 @@ p <- null_dist1 %>%
 p
 ```
 
-Because our p-value of `r round(p, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369). This indicates that black people are disproportionately stopped at a higher rate.
+Because our p-value of `r round(p, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369). This indicates that black people are disproportionately stopped at a higher rate.
 
 ```{r create-sample2}
 set.seed(145)
@@ -231,7 +231,7 @@ sample2 <- police %>%
 ```
 
 
-To investigate the second element of the research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test to determine if the difference between the observed and expected proportions is statistically significant.
+To investigate the second element of the research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test for difference in proportions to determine if the difference between the observed and expected proportions is statistically significant.
 
 Let $\rho$ equal the true proportion of stopped drivers who were female within Durham County. 
 
@@ -264,7 +264,7 @@ p2 <- null_dist2 %>%
 p2
 ```
 
-Because our p-value of `r round(p2, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger population.
+Because our p-value of `r round(p2, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger population.
 
 
 We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
@@ -283,7 +283,7 @@ chi1
 
 The chi-squared test for independence outputted a statistic of `r round(chi1$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 4 degrees of freedom.
 
-Since our p-value of `r round(chi1$p_value, 3)` is less than our alpha of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
+Since our p-value of `r round(chi1$p_value, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
 
 We then tested if a driver's sex is associated with the likelihood of receiving a citation.
 
@@ -302,7 +302,7 @@ chi2
 
 The chi-squared test for independence outputted a statistic of `r round(chi2$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 1 degree of freedom.
 
-Since our p-value of `r round(chi2$p_value, 3)` is greater than our alpha of 0.05, we fail to reject the null hypothesis. The data does not provide sufficient evidence to indicate that sex and the likelihood of receiving a citation upon being stopped are associated.
+Since our p-value of `r round(chi2$p_value, 3)` is greater than our $\alpha$ of 0.05, we fail to reject the null hypothesis. The data does not provide sufficient evidence to indicate that sex and the likelihood of receiving a citation upon being stopped are associated.
 
 By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the  nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. The logistic regression model has four variables to predict the log-odds of receiving a citation upon being stopped: The subject's race, the subject's age, the subject's sex, and an interaction variable between a subject's race and subject's sex (See Appendix 1 for the reasoning why this logistic regression model was chosen).
 
@@ -390,22 +390,16 @@ This model yields a few key conclusions:
 The implications of this model will be further discussed in the "Discussion" section of the report.
 
 ## Discussion
- Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
- 
- 
- 
-Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. 
 
-We also learned that, when analyzing the likelihood of receiving a citation based on race, hispanics are the most likely to receive a traffic citation; however, blacks are disproportionately more likely to be stopped. 
+Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
-Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. 
+Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. It is unclear as to why this occurs because we only have observational data, which is limitation. All this provides evidence for is that Blacks are more likely to be stopped. This does not mean that police officers are racially profiling because there can be lurking variables. However, our data is consistent with past literature. 
 
-For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females.
+For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females. However, with our limitations it is unknown if there are any lurking or unknown variables. 
 
-Key limitation: can't isolate why this occurs, only obserational
+The Stanford policing project separated races differently than the census data As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
-However, due to our lack of complete data for the surrounding areas we are unable to establish if this trend is due to causation or if it is due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
-
+We are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
 
 ## Appendix 1
 
@@ -473,7 +467,56 @@ BIC(logit_race)
 AIC(logit_race)
 ```
 
+<<<<<<< HEAD
 The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
 TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
 
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
+=======
+We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
+
+## Appendix 2
+
+```{r line-graph1}
+library(lubridate)
+line <- police %>% 
+  filter(subject_race != "other", year(date) != 2001) %>% 
+  mutate(year = year(date))
+
+line <- line %>% 
+  group_by(year) %>% 
+  count(subject_race) %>% 
+  mutate(prop = n/sum(n)) 
+
+```
+
+```{r line-graph2}
+ggplot(line, aes(x = year, y = prop, color = subject_race)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Proportions of People Stopped in Traffic by Race over Time", 
+       x = "Year",
+       y = "Proportion of People Stopped in Traffic", 
+       color = "Subject Race") 
+```
+
+```{r line-graph3}
+line2 <- police %>% 
+  filter(year(date) != 2001) %>% 
+  mutate(year = year(date))
+
+line2 <- line2 %>% 
+  group_by(year) %>% 
+  count(subject_sex) %>% 
+  mutate(prop = n/sum(n)) 
+
+ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Proportions of People Stopped in Traffic by Sex over Time", 
+       x = "Year",
+       y = "Proportion of People Stopped in Traffic", 
+       color = "Subject Sex")
+```
+
+>>>>>>> 0d1e3fc709aafa57948a572ac36d653dc017b8e4
