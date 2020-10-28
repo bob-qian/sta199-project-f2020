@@ -66,16 +66,6 @@ header = TRUE, sep = ",")
 combined <- full_join(props, police_viz)
 ```
 
-```{r stop-rate-viz}
-ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
-  geom_bar(stat = "identity", position = "fill") + 
-  labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
-       x = "Observed from Data vs Expected from 2010 Census",
-       y = "Proportion", 
-       fill = "Subject Race") +
-  scale_fill_brewer()
-```
-
 ```{r props2}
 props2 <- police %>% 
   count(subject_sex) %>% 
@@ -96,6 +86,24 @@ header = TRUE, sep = ",")
 combined2 <- full_join(props2, police_viz2)
 ```
 
+The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
+
+To begin with, we use census data to compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham.
+
+```{r stop-rate-viz}
+ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
+       x = "Observed from Data vs Expected from 2010 Census",
+       y = "Proportion", 
+       fill = "Subject Race") +
+  scale_fill_brewer()
+```
+
+According to the chart, a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census.
+
+Next, we use census data to compare the expected proportion of people stopped by sex to the observed proportion of people stopped by sex in Durham.
+
 ```{r stop-rate-viz2}
 ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
   geom_bar(stat = "identity", position = "fill") + 
@@ -105,9 +113,9 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
        fill = "Subject Sex") 
 ```
 
-The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
+According to the chart, a significantly greater proportion of males were stopped compared to what was expected based on the proportion of males in Durham County in the 2010 census.
 
-To begin with, we visualize a segmented bar graph with the probability of citation based on race below. 
+Then, we visualize a segmented bar graph with the proportion of citations based on race below. 
 
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
@@ -120,7 +128,7 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
 
 According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
 
-We then visualize a segmented bar graph with the probability of citation based on sex below.
+Lastly, we visualize a segmented bar graph with the proportion of citations based on sex below.
 
 ```{r bargraph2}
 ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
@@ -133,15 +141,15 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
 
 Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
 
-ADD NULL DISTRIBUTION STUFF HERE (HOW DID WE SIMULATE)
+To answer the first part of our research question, we conduct a hypothesis test using a simulation-based approach. We create null distributions based on census proportion data for race and then for sex, and compare this to the observed proportion data to test for significant differences.
 
-To answer our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
+To answer the second part of our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
 
 We perform two chi-square tests. For the first, we ask whether there is an association between someone's race status and whether a citation was issued. For the second, we ask whether there is an association between someone's sex and whether a citation was issued.
 
 With each chi-square test, we compare observed versus the expected counts that we would expect if each $H_0$ were true. If these total differences are "large enough," then we reject the null hypothesis. We will perform each chi-square test at the $\alpha = 0.05$ significance level.
 
-ADD LOGISTIC REGRESSION STUFF HERE - how we investigate age's relationship to citation issued.
+If we find that any two variables are associated in a significant manner, we will then engage in a logistic regression model to investigate the nature of the association, using the methods described in Appendix 1 to select the best model.
 
 ## Results
 
