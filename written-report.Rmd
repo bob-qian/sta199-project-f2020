@@ -366,10 +366,22 @@ This model yields a few key conclusions:
 The implications of this model will be further discussed in the "Discussion" section of the report.
 
 ## Discussion
+ Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
+ 
+ 
+ 
+Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. 
 
-Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped--Hispanics were the most likely to receive a citation after being stopped. 
+We also learned that, when analyzing the likelihood of receiving a citation based on race, hispanics are the most likely to receive a traffic citation; however, blacks are disproportionately more likely to be stopped. 
 
-Can't establish causation or isolate if it's because of discriminatory policing practices - only can note trends
+Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. 
+
+For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females.
+
+Key limitation: can't isolate why this occurs, only obserational
+
+However, due to our lack of complete data for the surrounding areas we are unable to establish if this trend is due to causation or if it is due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
+
 
 ## Appendix 1
 
@@ -438,6 +450,8 @@ AIC(logit_race)
 ```
 
 <<<<<<< HEAD
+
+
 The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
 TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
 =======
