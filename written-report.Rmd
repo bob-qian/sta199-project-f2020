@@ -178,7 +178,7 @@ sample <- police %>%
 # Found code for sampling from https://stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame
 ```
 
-We first investigated the research question in reference to stop rates. Our exploratory data analysis indicated that black people appeared to be stopped at a disproportionately higher rates compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we created a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
+We first investigated the research question regarding if race and sex demographics were proportionately (according to census proportions) stopped in traffic. Our exploratory data analysis for the true proportion of black people stopped in traffic indicated that black people appeared to be stopped at a disproportionately higher rate compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we created a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
 
 Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
 
@@ -231,7 +231,7 @@ sample2 <- police %>%
 ```
 
 
-To investigate the second element of our first research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test for difference in proportions to determine if the difference between the observed and expected proportions is statistically significant.
+To investigate the second element of our first research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis on the true proportion of female drivers stopped in traffic indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test for difference in proportions to determine if the difference between the observed and expected proportions is statistically significant.
 
 Let $\rho$ equal the true proportion of stopped drivers who were female within Durham County. 
 
@@ -264,13 +264,13 @@ p2 <- null_dist2 %>%
 p2
 ```
 
-Because our p-value of `r round(p2, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger population.
+Because our p-value of `r round(p2, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger Durham population.
 
 
 
 
 
-We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
+Furthermore, we then investigated the second element of our research question--the relationship between race and citation issued or sex and citation issued--and conducted a series of chi-squared tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
 
 $H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
 
@@ -396,13 +396,13 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
-We have also learned that Black people are disproportionately more likely to be stopped for a traffic violation, however, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is limitation. All this provides is evidence for is that Blacks are more likely to be stopped. This does not necessarily mean that police officers are racially profiling because there can be lurking variables. However, our data is consistent with past literature. 
+We have also learned that black people are disproportionately more likely to be stopped for a traffic violation, as opposed to their makeup of the total Durham population. However, black people were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is a limitation. Because we do not have randomization or experimental design, our data analysis only provides evidence for the observation that black people are more likely to be stopped than white people. Though we cannot conclude any cause-and-effect relationship between race and the likelihood of being stopped by police, our data is consistent with past literature. For instance, in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness, Alexander discusses the use of racial profiling and pretext stops within the criminal justice system. Nonetheless, we only have evidence that suggests statiscally significant differences in proportion of black drivers being stopped (as opposed to their population percentage) and white drivers being stopped (as opposed to their population percentage).
 
-For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females. However, with our limitations it is unknown if there are any lurking or unknown variables. 
+For most races, there is very little change in data between citations being given by sex. However, significantly more black females are given citations than their male counterparts. This could possibly show unspoken discrimination against black females. However, with our observational data limitations, it is unknown if there are any lurking or unknown variables. 
 
-The Stanford policing project separated races differently than the census data As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
+Another limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
-One of our biggest limitations is that we are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
+One of our biggest limitations is that we are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and cannot isolate causation. 
 
 ## Appendix 1
 
