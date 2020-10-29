@@ -86,9 +86,7 @@ header = TRUE, sep = ",")
 combined2 <- full_join(props2, police_viz2)
 ```
 
-<<<<<<< HEAD
 
-=======
 The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
 
 To begin with, we calculate summary statistics for stop rate based on race in 2010:
@@ -122,7 +120,7 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
 According to the chart, a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census.
 
 Next, we use census data to compare the expected proportion of people stopped by sex to the observed proportion of people stopped by sex in Durham.
->>>>>>> 96eb92de94397a8b6fd2d6bb7b4d0b60fc906bb4
+
 
 ```{r stop-rate-viz2}
 ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
@@ -161,13 +159,11 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
 
 Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
 
-To answer the first part of our research question, we conduct a hypothesis test using a simulation-based approach. We create null distributions based on census proportion data for race and then for sex, and compare this to the observed proportion data to test for significant differences.
+To answer the first part of our research question on the relationship between race and sex and the likelihood of being stopped in traffice by police, we conducted a hypothesis test using a simulation-based approach. We created null distributions for the proportion of stopped drivers separately based on race and on sex, and then compare these proportions with the census data on proportions of race and sex in Durham to test if their is any statistical difference.
 
-To answer the second part of our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
+To answer the second part of our research question, on how race and sex are related to receiving a citation after a traffic stop, we utilized the chi-squared test. The chi-squared test helps us find evidence for an association or lack of association between race and citation issued (the first chi-squared test) and sex and citation issued (the second chi-squared test) when race, sex, and citation issued are categorical variables.
 
-We perform two chi-square tests. For the first, we ask whether there is an association between someone's race status and whether a citation was issued. For the second, we ask whether there is an association between someone's sex and whether a citation was issued.
-
-With each chi-square test, we compare observed versus the expected counts that we would expect if each $H_0$ were true. If these total differences are "large enough," then we reject the null hypothesis. We will perform each chi-square test at the $\alpha = 0.05$ significance level.
+Within each chi-squared test, we compared observed versus the expected counts of a citation being issued based on race or sex if each $H_0$ were true. If these total differences are "large enough," then we would reject the null hypothesis. We performed each chi-squared test at the $\alpha = 0.05$ significance level.
 
 If we find that any two variables are associated in a significant manner, we will then engage in a logistic regression model to investigate the nature of the association, using the methods described in Appendix 1 to select the best model.
 
@@ -235,7 +231,7 @@ sample2 <- police %>%
 ```
 
 
-To investigate the second element of the research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test for difference in proportions to determine if the difference between the observed and expected proportions is statistically significant.
+To investigate the second element of our first research question (in reference to sex), we created another stratified proportional sample with `r nrow(sample2)` observations, or 1% of the observations in the data frame. Our exploratory data analysis indicated that females were associated with a lower likelihood of being stopped, so we conducted a one-tailed test for difference in proportions to determine if the difference between the observed and expected proportions is statistically significant.
 
 Let $\rho$ equal the true proportion of stopped drivers who were female within Durham County. 
 
@@ -269,6 +265,9 @@ p2
 ```
 
 Because our p-value of `r round(p2, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that a female person is disproportionately less likely to be stopped by police in traffic in Durham County relative to their proportion within the larger population. Conversely, this also means that a male person is more likely to be stopped by police in traffic relative to their proportion within the larger population.
+
+
+
 
 
 We then investigated the second element of our research question and conducted a series of chi-square tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
