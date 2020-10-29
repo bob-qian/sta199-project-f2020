@@ -66,16 +66,6 @@ header = TRUE, sep = ",")
 combined <- full_join(props, police_viz)
 ```
 
-```{r stop-rate-viz}
-ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
-  geom_bar(stat = "identity", position = "fill") + 
-  labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
-       x = "Observed from Data vs Expected from 2010 Census",
-       y = "Proportion", 
-       fill = "Subject Race") +
-  scale_fill_brewer()
-```
-
 ```{r props2}
 props2 <- police %>% 
   count(subject_sex) %>% 
@@ -96,7 +86,43 @@ header = TRUE, sep = ",")
 combined2 <- full_join(props2, police_viz2)
 ```
 
+<<<<<<< HEAD
 
+=======
+The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
+
+To begin with, we calculate summary statistics for stop rate based on race in 2010:
+
+```{r stop-rate}
+durham_population <- data.frame(subject_race = c("asian/pacific islander", "black", "hispanic", "other", "white"), population = round(c(0.056 *270001, 0.369* 270001, 0.137*270001, 0.009*270001, 0.43*270001)))
+
+stop_rate <- police %>% 
+  filter(year(date) == 2010) %>%
+  count(subject_race) %>%
+  left_join(durham_population) %>%
+  mutate(stop_rate = n / population)
+
+stop_rate
+```
+
+From the table, it appears that black people have the highest stop rate among races in Durham in 2010. This rate is 2.5 times higher than the rate for white people in Durham in 2010.
+
+Then, we use census data to compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham.
+
+```{r stop-rate-viz}
+ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
+  geom_bar(stat = "identity", position = "fill") + 
+  labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
+       x = "Observed from Data vs Expected from 2010 Census",
+       y = "Proportion", 
+       fill = "Subject Race") +
+  scale_fill_brewer()
+```
+
+According to the chart, a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census.
+
+Next, we use census data to compare the expected proportion of people stopped by sex to the observed proportion of people stopped by sex in Durham.
+>>>>>>> 96eb92de94397a8b6fd2d6bb7b4d0b60fc906bb4
 
 ```{r stop-rate-viz2}
 ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
@@ -107,9 +133,9 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
        fill = "Subject Sex") 
 ```
 
-The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
+According to the chart, a significantly greater proportion of males were stopped compared to what was expected based on the proportion of males in Durham County in the 2010 census.
 
-To begin with, we visualize a segmented bar graph with the probability of citation based on race below. 
+Then, we visualize a segmented bar graph with the proportion of citations based on race below. 
 
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
@@ -122,7 +148,7 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
 
 According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
 
-We then visualize a segmented bar graph with the probability of citation based on sex below.
+Lastly, we visualize a segmented bar graph with the proportion of citations based on sex below.
 
 ```{r bargraph2}
 ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
@@ -135,15 +161,15 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
 
 Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
 
-ADD NULL DISTRIBUTION STUFF HERE (HOW DID WE SIMULATE)
+To answer the first part of our research question, we conduct a hypothesis test using a simulation-based approach. We create null distributions based on census proportion data for race and then for sex, and compare this to the observed proportion data to test for significant differences.
 
-To answer our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
+To answer the second part of our research question, we utilize the chi-square test. We selected this test because we want to determine whether there is an association between two variables where we have more than two samples.
 
 We perform two chi-square tests. For the first, we ask whether there is an association between someone's race status and whether a citation was issued. For the second, we ask whether there is an association between someone's sex and whether a citation was issued.
 
 With each chi-square test, we compare observed versus the expected counts that we would expect if each $H_0$ were true. If these total differences are "large enough," then we reject the null hypothesis. We will perform each chi-square test at the $\alpha = 0.05$ significance level.
 
-ADD LOGISTIC REGRESSION STUFF HERE - how we investigate age's relationship to citation issued.
+If we find that any two variables are associated in a significant manner, we will then engage in a logistic regression model to investigate the nature of the association, using the methods described in Appendix 1 to select the best model.
 
 ## Results
 
@@ -368,22 +394,16 @@ This model yields a few key conclusions:
 The implications of this model will be further discussed in the "Discussion" section of the report.
 
 ## Discussion
- Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
- 
- 
- 
-Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. 
 
-We also learned that, when analyzing the likelihood of receiving a citation based on race, hispanics are the most likely to receive a traffic citation; however, blacks are disproportionately more likely to be stopped. 
+Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
-Though black people are disproportionately more likely to be stopped for a traffic violation, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation after being stopped. 
+We have also learned that Black people are disproportionately more likely to be stopped for a traffic violation, however, they were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is limitation. All this provides is evidence for is that Blacks are more likely to be stopped. This does not necessarily mean that police officers are racially profiling because there can be lurking variables. However, our data is consistent with past literature. 
 
-For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females.
+For most races, there is very little change in data between citations being given by sex. However, significantly more Black females are given citations than there male counterparts. This could possibly show unspoken discrimination against Black females. However, with our limitations it is unknown if there are any lurking or unknown variables. 
 
-Key limitation: can't isolate why this occurs, only obserational
+The Stanford policing project separated races differently than the census data As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
-However, due to our lack of complete data for the surrounding areas we are unable to establish if this trend is due to causation or if it is due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
-
+One of our biggest limitations is that we are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and not isolate causation. 
 
 ## Appendix 1
 
@@ -451,4 +471,52 @@ BIC(logit_race)
 AIC(logit_race)
 ```
 
+The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
+TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
+
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
+
+## Appendix 2
+
+```{r line-graph1}
+library(lubridate)
+line <- police %>% 
+  filter(subject_race != "other", year(date) != 2001) %>% 
+  mutate(year = year(date))
+
+line <- line %>% 
+  group_by(year) %>% 
+  count(subject_race) %>% 
+  mutate(prop = n/sum(n)) 
+
+```
+
+```{r line-graph2}
+ggplot(line, aes(x = year, y = prop, color = subject_race)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Proportions of People Stopped in Traffic by Race over Time", 
+       x = "Year",
+       y = "Proportion of People Stopped in Traffic", 
+       color = "Subject Race") 
+```
+
+```{r line-graph3}
+line2 <- police %>% 
+  filter(year(date) != 2001) %>% 
+  mutate(year = year(date))
+
+line2 <- line2 %>% 
+  group_by(year) %>% 
+  count(subject_sex) %>% 
+  mutate(prop = n/sum(n)) 
+
+ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Proportions of People Stopped in Traffic by Sex over Time", 
+       x = "Year",
+       y = "Proportion of People Stopped in Traffic", 
+       color = "Subject Sex")
+```
+
