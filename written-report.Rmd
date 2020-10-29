@@ -96,6 +96,8 @@ header = TRUE, sep = ",")
 combined2 <- full_join(props2, police_viz2)
 ```
 
+
+
 ```{r stop-rate-viz2}
 ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
   geom_bar(stat = "identity", position = "fill") + 
