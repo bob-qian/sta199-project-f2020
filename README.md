@@ -1,4 +1,4 @@
-# project
+# Racial Disparities in Traffic Stops/Citations
 
 [Project](https://sta199-fa20-002.netlify.app/project/) for STA 199 - Fall 2020
 
