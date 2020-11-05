@@ -6,6 +6,8 @@
 
 ## Dataset
 
+The data set is a census of individual police stops in Durham created by the Stanford Open Policing project. Each observation in the data set is an individual police stop recorded in Durham during 2001 to 2015.
+
 ## Description of variables
 
 **date:** The date of the stop, in YYYY-MM-DD format.
