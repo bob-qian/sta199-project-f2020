@@ -397,13 +397,17 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 ## Discussion
 
+
+
 Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
 We have also learned that black people are disproportionately more likely to be stopped for a traffic violation, as opposed to their makeup of the total Durham population. However, black people were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is a limitation. Because we do not have randomization or experimental design, our data analysis only provides evidence for the observation that black people are more likely to be stopped than white people. Though we cannot conclude any cause-and-effect relationship between race and the likelihood of being stopped by police, our data is consistent with past literature. For instance, in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness, Alexander discusses the use of racial profiling and pretext stops within the criminal justice system. Nonetheless, we only have evidence that suggests statiscally significant differences in proportion of black drivers being stopped (as opposed to their population percentage) and white drivers being stopped (as opposed to their population percentage).
 
+Appendix 2 further explores the trends of the relationship between Traffic stops, sex, and race by time. Overall, these visualizations show that policing trends have not drastically changed over the time period from 2002 to 2015. 
+
 For most races, there is very little change in data between citations being given by sex. However, significantly more black females are given citations than their male counterparts. This could possibly show unspoken discrimination against black females. However, with our observational data limitations, it is unknown if there are any lurking or unknown variables. 
 
-Another limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
+A key limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
 The chi-squared test is another limitation that hinders our analysis. The chi-squared test only tells us whether or not a relationship exists between two variables, it does not tell us anything about the nature of the relationship between the variables.
 
