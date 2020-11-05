@@ -68,12 +68,13 @@ combined <- full_join(props, police_viz)
 
 ```{r stop-rate-viz}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
-  geom_bar(stat = "identity", position = "fill") + 
+  geom_bar(stat = "identity", position = "fill", color = "white") + 
   labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
        fill = "Subject Race") +
-  scale_fill_brewer()
+  scale_fill_viridis_d() + 
+  theme(aspect.ratio = 0.6)
 ```
 
 ```{r props2}
@@ -102,7 +103,8 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
   labs(title = "Observed vs Expected Proportions of People Stopped by Sex", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
-       fill = "Subject Sex") 
+       fill = "Subject Sex") +
+  theme(aspect.ratio = 0.6)
 ```
 
 The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
@@ -112,10 +114,11 @@ To begin with, we visualize a segmented bar graph with the probability of citati
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
   geom_bar(position = "fill") + 
-  labs(title = "Likelihood of Receiving Citation Based on Race", 
+  labs(title = "Likelihood of Citation Based on Race", 
        y = "Proportion", 
        x = "Subject Race", 
-       fill = "Citation Issued")
+       fill = "Citation Issued") + 
+  theme(aspect.ratio = 0.5)
 ```
 
 According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
@@ -125,7 +128,7 @@ We then visualize a segmented bar graph with the probability of citation based o
 ```{r bargraph2}
 ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
   geom_bar(position = "fill") + 
-  labs(title = "Likelihood of Receiving Citation Based on Sex", 
+  labs(title = "Likelihood of Citation Based on Sex", 
        y = "Proportion", 
        x = "Subject Sex", 
        fill = "Citation Issued")
@@ -349,7 +352,6 @@ Predicted Citation Log-Odds = 0.373 - 0.127 * subject_raceblack - 0.007 * age + 
 Predicted Citation Log-Odds = 0.373 + 0.357 * subject_racehispanic - 0.007 * age + 0.032 * male - 0.004 * subject_racehispanic * male.
 
 Predicted Citation Log-Odds = 0.373 - 0.253 * subject_raceother - 0.007 * age + 0.032 * male + 0.151 * subject_raceother * male.
-
 
 This model yields a few key conclusions:
 
