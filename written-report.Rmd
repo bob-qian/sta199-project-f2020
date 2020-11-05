@@ -109,12 +109,13 @@ Then, we use census data to compare the expected proportion of people stopped by
 
 ```{r stop-rate-viz}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
-  geom_bar(stat = "identity", position = "fill") + 
+  geom_bar(stat = "identity", position = "fill", color = "white") + 
   labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
        fill = "Subject Race") +
-  scale_fill_brewer()
+  scale_fill_viridis_d() + 
+  theme(aspect.ratio = 0.6)
 ```
 
 According to the chart, a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census.
@@ -143,7 +144,7 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Race", 
        fill = "Citation Issued") + 
-  theme(aspect.ratio = 0.5)
+  theme(aspect.ratio = 0.6)
 ```
 
 According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
@@ -156,7 +157,8 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
   labs(title = "Likelihood of Citation Based on Sex", 
        y = "Proportion", 
        x = "Subject Sex", 
-       fill = "Citation Issued")
+       fill = "Citation Issued") + 
+  theme(aspect.ratio = 0.6)
 ```
 
 Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
@@ -499,7 +501,8 @@ ggplot(line, aes(x = year, y = prop, color = subject_race)) +
   labs(title = "Proportions of People Stopped in Traffic by Race over Time", 
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
-       color = "Subject Race") 
+       color = "Subject Race") + 
+  theme(aspect.ratio = 0.75)
 ```
 
 ```{r line-graph3}
@@ -518,6 +521,7 @@ ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
   labs(title = "Proportions of People Stopped in Traffic by Sex over Time", 
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
-       color = "Subject Sex")
+       color = "Subject Sex") + 
+  theme(aspect.ratio = 0.75)
 ```
 
