@@ -2,7 +2,7 @@
 
 [Project](https://sta199-fa20-002.netlify.app/project/) for STA 199 - Fall 2020
 
-**Summary:** According to a Pew Research Center survey (https://www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/), "black adults are about five times as likely as whites to say they’ve been unfairly stopped by police because of their race or ethnicity." Given this information, we wish to investigate traffic stops in Durham from the Stanford Open Policing Project. We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (such as sex or age) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (sex, race, or age) and the likelihood of being stopped by police in traffic in Durham? 
+**Summary:** According to a Pew Research Center [survey](https://www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/), "black adults are about five times as likely as whites to say they’ve been unfairly stopped by police because of their race or ethnicity." Given this information, we wish to investigate traffic stops in Durham from the Stanford Open Policing Project. We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (such as sex or age) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (sex, race, or age) and the likelihood of being stopped by police in traffic in Durham? 
 
 ## Dataset
 
