@@ -111,12 +111,13 @@ Then, we use census data to compare the expected proportion of people stopped by
 
 ```{r stop-rate-viz}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
-  geom_bar(stat = "identity", position = "fill") + 
+  geom_bar(stat = "identity", position = "fill", color = "white") + 
   labs(title = "Observed vs Expected Proportions of People Stopped by Race", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
        fill = "Subject Race") +
-  scale_fill_brewer()
+  scale_fill_viridis_d() + 
+  theme(aspect.ratio = 0.6)
 ```
 
 According to the chart, a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census.
@@ -130,7 +131,8 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
   labs(title = "Observed vs Expected Proportions of People Stopped by Sex", 
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
-       fill = "Subject Sex") 
+       fill = "Subject Sex") +
+  theme(aspect.ratio = 0.6)
 ```
 
 According to the chart, a significantly greater proportion of males were stopped compared to what was expected based on the proportion of males in Durham County in the 2010 census.
@@ -140,10 +142,11 @@ Then, we visualize a segmented bar graph with the proportion of citations based 
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
   geom_bar(position = "fill") + 
-  labs(title = "Likelihood of Receiving Citation Based on Race", 
+  labs(title = "Likelihood of Citation Based on Race", 
        y = "Proportion", 
        x = "Subject Race", 
-       fill = "Citation Issued")
+       fill = "Citation Issued") + 
+  theme(aspect.ratio = 0.6)
 ```
 
 According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
@@ -153,10 +156,11 @@ Lastly, we visualize a segmented bar graph with the proportion of citations base
 ```{r bargraph2}
 ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
   geom_bar(position = "fill") + 
-  labs(title = "Likelihood of Receiving Citation Based on Sex", 
+  labs(title = "Likelihood of Citation Based on Sex", 
        y = "Proportion", 
        x = "Subject Sex", 
-       fill = "Citation Issued")
+       fill = "Citation Issued") + 
+  theme(aspect.ratio = 0.6)
 ```
 
 Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
@@ -379,7 +383,6 @@ Predicted Citation Log-Odds = 0.373 + 0.357 * subject_racehispanic - 0.007 * age
 
 Predicted Citation Log-Odds = 0.373 - 0.253 * subject_raceother - 0.007 * age + 0.032 * male + 0.151 * subject_raceother * male.
 
-
 This model yields a few key conclusions:
 
 1. Holding age and sex constant, we expect the odds that a Hispanic person will receive a citation upon being stopped by police in Durham County to be `r exp(.357)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01), meaning there is less than a 1% chance such a coefficient or more extreme would be found in the data if race and the likelihood of receiving a citation were not associated. 
@@ -403,6 +406,8 @@ We have also learned that black people are disproportionately more likely to be 
 For most races, there is very little change in data between citations being given by sex. However, significantly more black females are given citations than their male counterparts. This could possibly show unspoken discrimination against black females. However, with our observational data limitations, it is unknown if there are any lurking or unknown variables. 
 
 Another limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
+
+The chi-squared test is another limitation that hinders our analysis. The chi-squared test only tells us whether or not a relationship exists between two variables, it does not tell us anything about the nature of the relationship between the variables.
 
 One of our biggest limitations is that we are unable to establish if the trends we found were due to causation or if they were due to discriminatory policing practices. We are only able to take note of trends and cannot isolate causation. 
 
@@ -472,8 +477,7 @@ BIC(logit_race)
 AIC(logit_race)
 ```
 
-The chi squared test tells us that there is a significant relationship between subject race and traffic citations; however, the chi squared test does not tell us the exact nature of the relationship between subject race and traffic citations. Once we created a barplot of our data we discovered that hispanics are the most likely to recieve a traffic citation after being pulled over. 
-TALK ABOUT LIMITATIONS AND WHAT WE COULD HAVE DONE BETTER
+
 
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
 
@@ -499,7 +503,8 @@ ggplot(line, aes(x = year, y = prop, color = subject_race)) +
   labs(title = "Proportions of People Stopped in Traffic by Race over Time", 
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
-       color = "Subject Race") 
+       color = "Subject Race") + 
+  theme(aspect.ratio = 0.75)
 ```
 
 ```{r line-graph3}
@@ -518,6 +523,7 @@ ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
   labs(title = "Proportions of People Stopped in Traffic by Sex over Time", 
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
-       color = "Subject Sex")
+       color = "Subject Sex") + 
+  theme(aspect.ratio = 0.75)
 ```
 
