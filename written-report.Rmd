@@ -371,7 +371,6 @@ ggplot(data, aes(x = logit, y = subject_age, color = subject_sex)) +
   facet_wrap(. ~ subject_race) +
   geom_point(alpha = 0.5) + 
   geom_smooth(method = "loess") + 
-  theme_bw() + 
   labs(title = "Subject Age vs Predicted Logits", 
        subtitle = "Faceted by Race", 
        x = "Predicted Logits", 
@@ -391,13 +390,13 @@ tidy(logit_race) %>%
 
 Using the above table outputted by the logistic regression model, we can create four separate equations for the predicted log-odds of receiving a citation:
 
-$\hat{Citation Log Odds}$ = 0.373 + 0.003 * subject_raceasian/pacific islander - 0.007 * age + 0.032 * male - 0.043 * subject_raceasian/pacific islander * male.
+$\widehat{Citation Log Odds}$ = 0.373 + 0.003 * subject_raceasian/pacific islander - 0.007 * age + 0.032 * male - 0.043 * subject_raceasian/pacific islander * male.
 
-Predicted Citation Log-Odds = 0.373 - 0.127 * subject_raceblack - 0.007 * age + 0.032 * male - 0.121 * subject_raceblack * male.
+$\widehat{Citation Log Odds}$ = 0.373 - 0.127 * subject_raceblack - 0.007 * age + 0.032 * male - 0.121 * subject_raceblack * male.
 
-Predicted Citation Log-Odds = 0.373 + 0.357 * subject_racehispanic - 0.007 * age + 0.032 * male - 0.004 * subject_racehispanic * male.
+$\widehat{Citation Log Odds}$ = 0.373 + 0.357 * subject_racehispanic - 0.007 * age + 0.032 * male - 0.004 * subject_racehispanic * male.
 
-Predicted Citation Log-Odds = 0.373 - 0.253 * subject_raceother - 0.007 * age + 0.032 * male + 0.151 * subject_raceother * male.
+$\widehat{Citation Log Odds}$ = 0.373 - 0.253 * subject_raceother - 0.007 * age + 0.032 * male + 0.151 * subject_raceother * male.
 
 This model yields a few key conclusions:
 
@@ -415,15 +414,15 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 ## Discussion
 
-Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
+Through our research, contrary to our original hypothesis, we have learned that males are more likely to be stopped than females in Durham County when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females is in line with previous research that males tend to take more risks when driving than females. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
-We have also learned that black people are disproportionately more likely to be stopped for a traffic violation, as opposed to their makeup in the total Durham County population. However, black people were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is a limitation. Because we do not have randomization or experimental design, our data analysis only provides evidence for the observation that black people are more likely to be stopped than white people. Though we cannot conclude any cause-and-effect relationship between race and the likelihood of being stopped by police, our data is consistent with past literature. For instance, our analysis is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness. Nonetheless, we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage).
+Consistent with our original hypothesis, we have also learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation. However, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. Nonetheless, we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). In addition, our robust logistic regression model indicates that age does have a statistically significant association with the likelihood of receiving a citation, with the predicted log-odds decreasing as age increases in line with our original hypothesis.
 
 Appendix 2 further explores the trends of the relationship between traffic stops, sex, and race by time. Overall, these visualizations show that policing trends by race have not dramatically changed over the time period from 2002 to 2015, which may indicate the enduring relevance of our conclusions today.
 
-For most races, there is very little change in data between citations being given by sex. However, significantly more black females are given citations than their male counterparts. This could possibly show unspoken discrimination against black females. However, with our observational data limitations, it is unknown if there are any lurking or unknown variables. 
+For most races, there is very little change in data between citations being given by sex. However, the odds that a black female will receive a citation are significantly greater than their male counterparts. This could possibly show unspoken discrimination against black females, an idea we believe necessitates further statistical analysis. A statistical exploration of stop rates of black females compared to black males and white females could illuminate the unique intersectional experiences faced by black females within America. 
 
-A key limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
+A key limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. Specifically, the Stanford Policing Project data on race did not account for biracial people, people of other races, and did not detail what category white, black, or Asian Hispanics would fall under. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
 
 The chi-squared test is another limitation that hinders our analysis. The chi-squared test only tells us whether or not a relationship exists between two variables, it does not tell us anything about the nature of the relationship between the variables.
 
