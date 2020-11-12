@@ -34,7 +34,7 @@ Our data is a census of individual police stops in Durham created by the Stanfor
 
 We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data (https://www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI625219#RHI625219) as markers for comparison. 
 
-Additionally, we will examine whether race, sex, or age are related to the outcome of the traffic stop (whether a citation will be issued). We hypothesize that race and the likelihood of receiving a citation are related, with black people more likely to receive a citation upon being stopped. We additionally hypothesize that younger people have a higher chance of receiving a citation upon being stopped and that sex has no significant relationship with being stopped in traffic.
+Additionally, we will examine whether race, sex, or age are related to the outcome of the traffic stop (whether a citation will be issued). We hypothesize that race and the likelihood of receiving a citation are related, with black people more likely to receive a citation upon being stopped. We additionally hypothesize that younger people have a higher chance of receiving a citation upon being stopped and that sex has no significant relationship with receiving a citation upon being stopped in traffic.
 
 ### Variables
 
@@ -134,6 +134,7 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
        x = "Observed from Data vs Expected from 2010 Census",
        y = "Proportion", 
        fill = "Subject Sex") +
+  scale_fill_manual(values = c("#ede3da", "#31394d")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -148,6 +149,7 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Race", 
        fill = "Citation Issued") + 
+  scale_fill_manual(values = c("#ede3da", "#31394d")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -162,6 +164,7 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Sex", 
        fill = "Citation Issued") + 
+  scale_fill_manual(values = c("#ede3da", "#31394d")) +
   theme(aspect.ratio = 0.6)
 ```
 
