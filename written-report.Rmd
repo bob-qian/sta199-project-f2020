@@ -18,12 +18,16 @@ library(broom)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
+```{r}
+nrow(police)
+```
+
 ```{r filter-data}
 police <- police %>% 
   filter(county_name == "Durham County") %>% 
   filter(subject_race != "unknown" & subject_race != "NA") %>% 
   filter(subject_age != "NA") 
-num_rep <- 100
+num_rep <- 10000
 ```
 
 ## Introduction and Data
@@ -32,13 +36,13 @@ The US incarcerates more people than any other country, and people of color make
 
 Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country"(https://openpolicing.stanford.edu/). Our dataset, the "Durham" dataset in the Stanford Open Policing Project, records each observation as an individual police stop recorded in Durham between December 2001 and December 2015, and has `r ncol(police)` variables and `r nrow(police)` observations. We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (primarily sex) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
 
-We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data (https://www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI625219#RHI625219) as markers for comparison. 
+We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data (https://www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI625219#RHI625219) as markers for comparison. To match our census information, we will filter the Stanford Policing Project dataset to only include data from Durham County, exclude races that are inputted as "unknown" or "NA," and exclude ages that are inputted as "NA." In doing so, a total of 2881 observations are removed from the dataset, a value that should not substantially alter the results with `r nrow(police)` observations remaining.
 
 Additionally, we will examine whether race, sex, or age are related to the outcome of the traffic stop (whether a citation will be issued). We hypothesize that race and the likelihood of receiving a citation are related, with black people more likely to receive a citation upon being stopped. We additionally hypothesize that younger people have a higher chance of receiving a citation upon being stopped and that sex has no significant relationship with receiving a citation upon being stopped in traffic.
 
 ### Variables
 
-Of the `r ncol(police)` variables, a categorical variable in the data set is `subject_race`, which describes the race of the subject involved in the traffic stop. A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded. Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
+Of the `r ncol(police)` variables, relevant categorical variables in the data set include `subject_race`, which describes the race of the subject involved in the traffic stop, and `subject_sex`, which describes the sex of the subject involved in the traffic stop. A discrete numerical variable in the data set is `subject_age`, which describes the age of the subject at the time of the traffic stop. A continuous numerical variable in the data set is `time`, which describes the hour, minute, and second that the stop was recorded. Other variables in the data set include `outcome`, which is what resulted from the stop (a warning or a citation, for example); `reason_for_stop`, which describes what the violation leading to the stop was; and `search_conducted`, whether a search of the subject was conducted during the stop.
 
 
 ## Methodology
@@ -91,9 +95,9 @@ combined2 <- full_join(props2, police_viz2)
 ```
 
 
-The variables we use to address the research question are `subject_race`, `subject_sex`, and `citation_issued`. For these variables we filter out any unknown and NA values. 
+The variables we use to address the research question are `subject_race`, `subject_sex`, `subject_age`, and `citation_issued`. 
 
-To begin with, we calculate summary statistics for stop rate based on race in 2010:
+To begin with, we calculate summary statistics for stop rate based on proportions by race in 2010:
 
 ```{r stop-rate}
 durham_population <- data.frame(subject_race = c("asian/pacific islander", "black", "hispanic", "other", "white"), population = round(c(0.056 *270001, 0.369* 270001, 0.137*270001, 0.009*270001, 0.43*270001)))
@@ -107,9 +111,9 @@ stop_rate <- police %>%
 stop_rate
 ```
 
-From the table, it appears that black people have the highest stop rate among races in Durham in 2010. This rate is 2.5 times higher than the rate for white people in Durham in 2010.
+From the table, it appears that black people have the highest stop rate among races in Durham County in 2010. This rate is roughly 2.5 times higher than the rate that white people get stopped in Durham County.
 
-Then, we use census data to compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham.
+To further visuzlie this trend, we use census data of population proportions by race and compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham County.
 
 ```{r stop-rate-viz}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
@@ -122,7 +126,7 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
   theme(aspect.ratio = 0.6)
 ```
 
-According to the chart, a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census.
+The chart provides some initial evidence for the hypothesis, indicating that a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census. Within the "Results" section, we will run statistical tests to determine if the differences between expected and observed proportions were significant.
 
 Next, we use census data to compare the expected proportion of people stopped by sex to the observed proportion of people stopped by sex in Durham.
 
@@ -138,9 +142,9 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
   theme(aspect.ratio = 0.6)
 ```
 
-According to the chart, a significantly greater proportion of males were stopped compared to what was expected based on the proportion of males in Durham County in the 2010 census.
+According to the chart, a significantly greater proportion of males were stopped compared to what was expected based on the proportion of males in Durham County in the 2010 census, providing some initial evidence against our hypothesis. Thus, both studied demographics initially appear to have disproportionately more people of a certain sex or race stopped compared to the 2010 census proportions.
 
-Then, we visualize a segmented bar graph with the proportion of citations based on race below. 
+To initially explore our second question, we visualize a segmented bar graph with the proportion of citations based on race below. 
 
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
@@ -168,9 +172,9 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
   theme(aspect.ratio = 0.6)
 ```
 
-Based on this chart, the proportion of citations issued for females and males appears to be roughly equal.
+Based on this chart, the proportion of citations issued for females and males appears to be roughly equal. Thus, based on our exploratory data analysis, it initially appears that race influences the likelihood of receiving a citation, while sex does not appear to be associated.
 
-To answer the first part of our research question on the relationship between race and sex and the likelihood of being stopped in traffice by police, we conducted a hypothesis test using a simulation-based approach. We created null distributions for the proportion of stopped drivers separately based on race and on sex, and then compare these proportions with the census data on proportions of race and sex in Durham to test if their is any statistical difference.
+To answer the first part of our research question on the relationship between race and sex and the likelihood of being stopped in traffic by police, we conducted a hypothesis test using a simulation-based approach. We created null distributions for the proportion of stopped drivers separately based on race and on sex, and then compare these proportions with the census data on proportions of race and sex in Durham to test if their is any statistical difference.
 
 To answer the second part of our research question, on how race and sex are related to receiving a citation after a traffic stop, we utilized the chi-squared test. The chi-squared test helps us find evidence for an association or lack of association between race and citation issued (the first chi-squared test) and sex and citation issued (the second chi-squared test) when race, sex, and citation issued are categorical variables.
 
@@ -375,7 +379,8 @@ ggplot(data, aes(x = logit, y = subject_age, color = subject_sex)) +
        subtitle = "Faceted by Race", 
        x = "Predicted Logits", 
        y = "Subject Age", 
-       color = "Subject Sex")
+       color = "Subject Sex") + 
+  scale_color_manual(values=c('#ffffff', '#000000'))
 
 # Found code for assumption check from http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/ 
 ```
@@ -402,17 +407,15 @@ This model yields a few key conclusions:
 
 2. Holding age and sex constant, we expect the odds that a black person will receive a citation upon being stopped by police in Durham County to be `r exp(-0.127)` times the odds that a white person will receive a citation upon being stopped by police. The coefficient is also statistically significant (p-value < 0.01).
 
-3. Holding race and sex constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope  0).
+3. Holding race and sex constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope $\neq$ 0).
 
-4. Holding race and age constant, we expect the odds that a male person will receive a citation upon being stopped by police in Durham County to be `r exp(0.03228)` times the odds that a female person will receive a citation upon being stopped. This coefficient, however, is not statistically signifiacnt (p-value > 0.01).
+4. Holding race and age constant, we expect the odds that a male person will receive a citation upon being stopped by police in Durham County to be `r exp(0.03228)` times the odds that a female person will receive a citation upon being stopped. This coefficient, however, is not statistically significant at the 1% level (p-value > 0.01).
 
 5. In most cases, the interaction variable between sex and race does not result in a statistically significant coefficient, the critical exception being the case of black people. Holding age and race constant, upon being stopped, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676 + 0.032)` times the odds that a black woman will receive a traffic citation upon being stopped (also factored in the nonsignificant "sex" variable by itself in odds calculation; without that coefficient, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676)` times the odds that a black woman will receive a citation upon being stopped). Thus, unlike nearly every other race listed, black people are the only race where women are statistically significantly more likely to receive a citation upon being stopped. 
 
 The implications of this model will be further discussed in the "Discussion" section of the report.
 
 ## Discussion
-
-
 
 Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
 
