@@ -385,7 +385,7 @@ Conditions met. Proceed with a logistic regression model.
 
 ```{r tidy-logit}
 tidy(logit_race) %>% 
-  kable(digits = 3)
+  kable(digits = 3) 
 ```
 
 Using the above table outputted by the logistic regression model, we can create four separate equations for the predicted log-odds of receiving a citation:
