@@ -436,23 +436,37 @@ One of our biggest limitations is that we are unable to establish if the trends 
 
 ## References
 
-Meaning of AIC/BIC here: https://www.sciencedirect.com/topics/medicine-and-dentistry/akaike-information-criterion#:~:text=Akaike%20information%20criterion%20(AIC)%20(,among%20all%20the%20other%20models.&text=A%20lower%20AIC%20or%20BIC%20value%20indicates%20a%20better%20fit
+### Meaning of AIC/BIC here: 
 
-Pew Research Study referenced in Introduction: https://www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/
+Mohammed, Emad A, and Behrouz H Far. “Akaike Information Criterion.” Akaike Information Criterion - an Overview | ScienceDirect Topics, 2015, www.sciencedirect.com/topics/medicine-and-dentistry/akaike-information-criterion. 
 
-Statistic for more black people incarcerated: (https://www.sentencingproject.org/criminal-justice-facts/)
+### Pew Research Study referenced in Introduction: 
 
-Stanford Policing Project: (https://openpolicing.stanford.edu/)
+DeSilver, Drew, et al. “10 Things We Know about Race and Policing in the U.S.” Pew Research Center, Pew Research Center, 17 Aug. 2020, www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/. 
 
-2010 Durham Census: (https://www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI625219#RHI625219)
+### Statistic for more black people incarcerated:
 
-Study that Males are Riskier: https://www.sciencedirect.com/science/article/pii/S1369847814001727
+“Criminal Justice Facts.” The Sentencing Project, 2 Sept. 2020, www.sentencingproject.org/criminal-justice-facts/. 
 
-Code: https://stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame 
-http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/ 
+### Stanford Policing Project: 
 
+Barghouty, Pheobe, et al. “The Stanford Open Policing Project.” Openpolicing.stanford.edu, 2020, openpolicing.stanford.edu/. 
 
-Michelle Alexander's New Jim Crow
+### 2010 Durham Census:
+
+“U.S. Census Bureau QuickFacts: Durham County, North Carolina.” Census Bureau QuickFacts, 2010, www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI225219. 
+
+### Study that Males are Riskier
+
+Rhodes, Nancy, et al. “Risky Driving among Young Male Drivers: The Effects of Mood and Passengers.” Transportation Research Part F: Traffic Psychology and Behaviour, Pergamon, 26 Dec. 2014, www.sciencedirect.com/science/article/pii/S1369847814001727.
+
+### Code 
+ “Stratified Random Sampling from Data Frame.” Stack Overflow, 1 July 1963, stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame. 
+ 
+Kassambara, and Michael U. “Logistic Regression Assumptions and Diagnostics in R.” STHDA, 11 Mar. 2018, www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/. 
+ 
+
+Alexander, Michelle. *The New Jim Crow: Mass Incarceration in the Age of Colourblindness*. Penguin Books, 2019. 
 
 ## Appendix 1
 
