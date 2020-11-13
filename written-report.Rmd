@@ -119,7 +119,7 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
        x = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
        fill = "Subject Race") +
-  scale_fill_viridis_d() + 
+  scale_fill_manual(values = c("#175676", "#4ba3c3", "#cce6f4", "#d62839", "#ba324f")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -135,7 +135,7 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
        x = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
        fill = "Subject Sex") +
-  scale_fill_manual(values = c("#ede3da", "#31394d")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -150,7 +150,7 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Race", 
        fill = "Citation Issued") + 
-  scale_fill_manual(values = c("#ede3da", "#31394d")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -165,7 +165,7 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Sex", 
        fill = "Citation Issued") + 
-  scale_fill_manual(values = c("#ede3da", "#31394d")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -539,6 +539,7 @@ ggplot(line, aes(x = year, y = prop, color = subject_race)) +
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
        color = "Subject Race") + 
+  scale_color_manual(values = c("#175676", "#d62839", "#4ba3c3", "#ba324f")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -559,6 +560,7 @@ ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
        color = "Subject Sex") + 
+  scale_color_manual(values=c('#ba324f', '#4ba3c3')) +
   theme(aspect.ratio = 0.6)
 ```
 
