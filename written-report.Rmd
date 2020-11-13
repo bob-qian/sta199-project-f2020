@@ -110,7 +110,9 @@ stop_rate %>%
 
 From the table, it appears that black people have the highest stop rate among races in Durham County in 2010. This rate is roughly 2.5 times higher than the rate that white people get stopped in Durham County.
 
-To further visuzlie this trend, we use census data of population proportions by race and compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham County.
+To further visualize this trend, we use census data of population proportions by race and compare the expected proportion of people stopped by race to the observed proportion of people stopped by race in Durham County.
+
+$~$
 
 ```{r stop-rate-viz}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
@@ -119,14 +121,17 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
        x = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
        fill = "Subject Race") +
-  scale_fill_viridis_d() + 
+  scale_fill_manual(values = c("#175676", "#4ba3c3", "#cce6f4", "#d62839", "#ba324f")) +
   theme(aspect.ratio = 0.6)
 ```
+
+$~$
 
 The chart provides some initial evidence for the hypothesis, indicating that a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census. Within the "Results" section, we will run statistical tests to determine if the differences between expected and observed proportions were significant.
 
 Next, we use census data to compare the expected proportion of people stopped by sex to the observed proportion of people stopped by sex in Durham.
 
+$~$
 
 ```{r stop-rate-viz2}
 ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) + 
@@ -135,13 +140,17 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
        x = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
        fill = "Subject Sex") +
-  scale_fill_manual(values = c("#ede3da", "#31394d")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
   theme(aspect.ratio = 0.6)
 ```
+
+$~$
 
 According to the chart, a significantly greater proportion of males were stopped compared to what was expected based on the proportion of males in Durham County in the 2010 census, providing some initial evidence against our hypothesis. Thus, both studied demographics initially appear to have disproportionately more people of a certain sex or race stopped compared to the 2010 census proportions.
 
 To initially explore our second question, we visualize a segmented bar graph with the proportion of citations based on race below. 
+
+$~$
 
 ```{r bargraph}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
@@ -150,13 +159,17 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Race", 
        fill = "Citation Issued") + 
-  scale_fill_manual(values = c("#ede3da", "#31394d")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
   theme(aspect.ratio = 0.6)
 ```
+
+$~$
 
 According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
 
 Lastly, we visualize a segmented bar graph with the proportion of citations based on sex below.
+
+$~$
 
 ```{r bargraph2}
 ggplot(police, aes(x = subject_sex, fill = citation_issued)) + 
@@ -165,9 +178,11 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Sex", 
        fill = "Citation Issued") + 
-  scale_fill_manual(values = c("#ede3da", "#31394d")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
   theme(aspect.ratio = 0.6)
 ```
+
+$~$
 
 Based on this chart, the proportion of citations issued for females and males appears to be roughly equal. Thus, based on our exploratory data analysis, it initially appears that race influences the likelihood of receiving a citation, while sex does not appear to be associated.
 
@@ -539,6 +554,7 @@ ggplot(line, aes(x = year, y = prop, color = subject_race)) +
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
        color = "Subject Race") + 
+  scale_color_manual(values = c("#175676", "#d62839", "#4ba3c3", "#ba324f")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -559,6 +575,7 @@ ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
        x = "Year",
        y = "Proportion of People Stopped in Traffic", 
        color = "Subject Sex") + 
+  scale_color_manual(values=c('#ba324f', '#4ba3c3')) +
   theme(aspect.ratio = 0.6)
 ```
 
