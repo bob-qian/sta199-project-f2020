@@ -433,13 +433,7 @@ Through our research, contrary to our original hypothesis, we have learned that 
 
 Consistent with our original hypothesis, we have also learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation. However, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. Nonetheless, we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). In addition, our robust logistic regression model indicates that age does have a statistically significant association with the likelihood of receiving a citation, with the predicted log-odds decreasing as age increases in line with our original hypothesis.
 
-<<<<<<< HEAD
-Throughout our research, we have learned that males are more likely to be stopped than females when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females helps support research that males tend to take more risks when driving than woman. (https://www.sciencedirect.com/science/article/pii/S1369847814001727)
-
-We have also learned that black people are disproportionately more likely to be stopped for a traffic violation, as opposed to their makeup of the total Durham population. However, black people were not the most likely to receive a citation upon being stopped. We found that Hispanics were the most likely to receive a citation upon being stopped. It is unclear as to why this occurs because we only have observational data, which is a limitation. Because we do not have randomization or experimental design, our data analysis only provides evidence for the observation that black people are more likely to be stopped than white people. Though we cannot conclude any cause-and-effect relationship between race and the likelihood of being stopped by police, our data is consistent with past literature. For instance, our analysis is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness. Nonetheless, we only have evidence that suggests statiscally significant differences in proportion of black drivers being stopped (as opposed to their population percentage) and white drivers being stopped (as opposed to their population percentage). This concludes our hypothesis that race and the likelihood of being stopped by police in traffic in Durham are related as well as disproving our hypothesis that sex has no significant relationship with being stopped by police in traffic Durham. We also proved our hypothesis that younger people are more likely to receive traffic citations upon being stopped. 
-=======
 Appendix 2 further explores the trends of the relationship between traffic stops, sex, and race by time. Overall, these visualizations show that policing trends by race have not dramatically changed over the time period from 2002 to 2015, which may indicate the enduring relevance of our conclusions today.
->>>>>>> 1517d829ec4875ee237447f1fad471e919e2c2f6
 
 For most races, there is very little change in data between citations being given by sex. However, the odds that a black female will receive a citation are significantly greater than their male counterparts. This could possibly show unspoken discrimination against black females, an idea we believe necessitates further statistical analysis. A statistical exploration of stop rates of black females compared to black males and white females could illuminate the unique intersectional experiences faced by black females within America. 
 
@@ -451,7 +445,11 @@ One of our biggest limitations is that we are unable to establish if the trends 
 
 ## References
 
-### Meaning of AIC/BIC here: 
+### Michelle Alexander Book:
+
+Alexander, Michelle. *The New Jim Crow: Mass Incarceration in the Age of Colourblindness*. Penguin Books, 2019. 
+
+### Meaning of AIC/BIC: 
 
 Mohammed, Emad A, and Behrouz H Far. “Akaike Information Criterion.” Akaike Information Criterion - an Overview | ScienceDirect Topics, 2015, www.sciencedirect.com/topics/medicine-and-dentistry/akaike-information-criterion. 
 
@@ -480,9 +478,6 @@ Rhodes, Nancy, et al. “Risky Driving among Young Male Drivers: The Effects of 
  
 Kassambara, and Michael U. “Logistic Regression Assumptions and Diagnostics in R.” STHDA, 11 Mar. 2018, www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/. 
  
-
-Alexander, Michelle. *The New Jim Crow: Mass Incarceration in the Age of Colourblindness*. Penguin Books, 2019. 
-
 ## Appendix 1
 
 This appendix is devoted to showing why we chose the logistic regression model that we did. Utilizing the demographic characteristics of sex, race, and age, we attempted to create the most robust and explanatory model possible from the data. Below are the calculated AIC and BIC values for each model we considered. The model with the lowest AIC and BIC values was the one we chose, as it had the followed the principle of Occam's Razor the most faithfully (it explained the most in the least complex manner).
@@ -575,7 +570,7 @@ ggplot(line, aes(x = year, y = prop, color = subject_race)) +
        y = "Proportion of People Stopped in Traffic", 
        color = "Subject Race") + 
   scale_color_manual(values = c("#175676", "#d62839", "#4ba3c3", "#ba324f")) +
-  theme(aspect.ratio = 0.6)
+  theme(aspect.ratio = 0.8)
 ```
 
 ```{r line-graph3}
@@ -596,6 +591,6 @@ ggplot(line2, aes(x = year, y = prop, color = subject_sex)) +
        y = "Proportion of People Stopped in Traffic", 
        color = "Subject Sex") + 
   scale_color_manual(values=c('#ba324f', '#4ba3c3')) +
-  theme(aspect.ratio = 0.6)
+  theme(aspect.ratio = 0.8)
 ```
 
