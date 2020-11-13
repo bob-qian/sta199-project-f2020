@@ -121,7 +121,9 @@ ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) +
        x = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
        fill = "Subject Race") +
-  scale_fill_manual(values = c("#175676", "#4ba3c3", "#cce6f4", "#d62839", "#ba324f")) +
+  scale_fill_manual(values = c("#175676", "#4ba3c3", "#cce6f4", "#d62839", "#ba324f"),
+                    labels = c("Asian/Pacific Islander", "Black",
+                               "Hispanic", "Other", "White")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -140,7 +142,8 @@ ggplot(combined2, aes(x = O, y = proportion, fill = subject_sex)) +
        x = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
        fill = "Subject Sex") +
-  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3"),
+                    labels = c("Female", "Male")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -159,7 +162,8 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Race", 
        fill = "Citation Issued") + 
-  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3"),
+                    labels = c("Not Issued", "Issued")) +
   theme(aspect.ratio = 0.6)
 ```
 
@@ -178,7 +182,8 @@ ggplot(police, aes(x = subject_sex, fill = citation_issued)) +
        y = "Proportion", 
        x = "Subject Sex", 
        fill = "Citation Issued") + 
-  scale_fill_manual(values = c("#ba324f", "#4ba3c3")) +
+  scale_fill_manual(values = c("#ba324f", "#4ba3c3"),
+                    labels = c("Not Issued", "Issued")) +
   theme(aspect.ratio = 0.6)
 ```
 
