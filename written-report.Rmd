@@ -28,9 +28,9 @@ num_rep <- 10000
 
 ## Introduction and Data
 
-The US incarcerates more people than any other country, and people of color make up a disproportionate percent of the prison population . Police funding has grown significantly over the past four decades, and overpolicing in communities of color is a serious issue. In Michelle Alexander's book, The New Jim Crow: Mass Incarceration in the Age of Colorblindness, she discusses the rise of incarceration rates for black and brown people in the US. Alexander cites the War on Drugs as one of the biggest causes of contemporary mass incarceration, and she uses police pretext stops as an example. In pretext stops, cops can pull over a "suspicious" driver on the pretext of a very minor traffic violation (e.g. turning on red, going over the speed limit) and then do a drug sweep of the car, which may result in an arrest for drug-related charges. According to a Pew Research Center survey, "black adults are about five times as likely as whites to say they’ve been unfairly stopped by police because of their race or ethnicity." Given this background information on the criminal justice system, we would like to investigate if similar elements are at play in Durham, North Carolina.
+The US incarcerates more people than any other country, and people of color make up a disproportionate percent of the prison population. Police funding has grown significantly over the past four decades, and overpolicing in communities of color is a serious issue. In Michelle Alexander's book, *The New Jim Crow: Mass Incarceration in the Age of Colorblindness*, she discusses the rise of incarceration rates for black and brown people in the US. Alexander cites the War on Drugs as one of the biggest causes of contemporary mass incarceration, and she uses police pretext stops as an example. In pretext stops, cops can pull over a "suspicious" driver on the pretext of a very minor traffic violation (e.g. turning on red, going over the speed limit) and then do a drug sweep of the car, which may result in an arrest for drug-related charges. According to a Pew Research Center survey, "Black adults are about five times as likely as whites to say they’ve been unfairly stopped by police because of their race or ethnicity." Given this background information on the criminal justice system, we would like to investigate if similar elements are at play in Durham, North Carolina.
 
-Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country" (Stanford Policing Project). Our dataset, the "Durham" dataset in the Stanford Open Policing Project, records each observation as an individual police stop recorded in Durham between December 2001 and December 2015, and has `r ncol(police)` variables and `r nrow(police)` observations. We would like to see if that same kind of racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (primarily sex) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
+Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country" (Stanford Policing Project). Our dataset, the "Durham" dataset in the Stanford Open Policing Project, records each observation as an individual police stop recorded in Durham between December 2001 and December 2015, and has `r ncol(police)` variables and `r nrow(police)` observations. We would like to see if racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (primarily sex) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
 
 We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data as markers for comparison. To match our census information, we will filter the Stanford Policing Project dataset to only include data from Durham County, exclude races that are inputted as "unknown" or "NA," and exclude ages that are inputted as "NA." In doing so, a total of 2881 observations are removed from the dataset, a value that should not substantially alter the results with `r nrow(police)` observations remaining.
 
@@ -436,7 +436,7 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 Through our research, contrary to our original hypothesis, we have learned that males are more likely to be stopped than females in Durham County when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females is in line with previous research that males tend to take more risks when driving than females. 
 
-Consistent with our original hypothesis, we have also learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation. However, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's The New Jim Crow: Mass Incarceration in the Age of Colorblindness, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. Nonetheless, we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). In addition, our robust logistic regression model indicates that age does have a statistically significant association with the likelihood of receiving a citation, with the predicted log-odds decreasing as age increases in line with our original hypothesis.
+Consistent with our original hypothesis, we have also learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation. However, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's *The New Jim Crow: Mass Incarceration in the Age of Colorblindness*, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. Nonetheless, we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). In addition, our robust logistic regression model indicates that age does have a statistically significant association with the likelihood of receiving a citation, with the predicted log-odds decreasing as age increases in line with our original hypothesis.
 
 Appendix 2 further explores the trends of the relationship between traffic stops, sex, and race by time. Overall, these visualizations show that policing trends by race have not dramatically changed over the time period from 2002 to 2015, which may indicate the enduring relevance of our conclusions today.
 
@@ -450,35 +450,35 @@ One of our biggest limitations is that we are unable to establish if the trends 
 
 ## References
 
-### Michelle Alexander Book:
+**Michelle Alexander Book:**
 
 Alexander, Michelle. *The New Jim Crow: Mass Incarceration in the Age of Colourblindness*. Penguin Books, 2019. 
 
-### Meaning of AIC/BIC: 
+**Meaning of AIC/BIC:**
 
 Mohammed, Emad A, and Behrouz H Far. “Akaike Information Criterion.” Akaike Information Criterion - an Overview | ScienceDirect Topics, 2015, www.sciencedirect.com/topics/medicine-and-dentistry/akaike-information-criterion. 
 
-### Pew Research Study referenced in Introduction: 
+**Pew Research Study referenced in Introduction:**
 
 DeSilver, Drew, et al. “10 Things We Know about Race and Policing in the U.S.” Pew Research Center, Pew Research Center, 17 Aug. 2020, www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/. 
 
-### Statistic for more black people incarcerated:
+**Statistic for more black people incarcerated:**
 
 “Criminal Justice Facts.” The Sentencing Project, 2 Sept. 2020, www.sentencingproject.org/criminal-justice-facts/. 
 
-### Stanford Policing Project: 
+**Stanford Policing Project:**
 
 Barghouty, Pheobe, et al. “The Stanford Open Policing Project.” Openpolicing.stanford.edu, 2020, openpolicing.stanford.edu/. 
 
-### 2010 Durham Census:
+**2010 Durham Census:**
 
 “U.S. Census Bureau QuickFacts: Durham County, North Carolina.” Census Bureau QuickFacts, 2010, www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI225219. 
 
-### Study that Males are Riskier
+**Study that Males are Riskier:**
 
 Rhodes, Nancy, et al. “Risky Driving among Young Male Drivers: The Effects of Mood and Passengers.” Transportation Research Part F: Traffic Psychology and Behaviour, Pergamon, 26 Dec. 2014, www.sciencedirect.com/science/article/pii/S1369847814001727.
 
-### Code 
+**Code** 
  “Stratified Random Sampling from Data Frame.” Stack Overflow, 1 July 1963, stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame. 
  
 Kassambara, and Michael U. “Logistic Regression Assumptions and Diagnostics in R.” STHDA, 11 Mar. 2018, www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/. 
@@ -546,8 +546,6 @@ Logistic Regression of Race, Sex, Age, and Race * Sex:
 BIC(logit_race)
 AIC(logit_race)
 ```
-
-
 
 We obtained both our lowest AIC value here and a lower BIC value, making this our most robust and explanatory logistic regression model.
 
