@@ -31,7 +31,7 @@ num_rep <- 10000
 
 The US incarcerates more people than any other country, and people of color make up a disproportionate percent of the prison population. Police funding has grown significantly over the past four decades, and overpolicing in communities of color is a serious issue. In Michelle Alexander's book, *The New Jim Crow: Mass Incarceration in the Age of Colorblindness*, she discusses the rise of incarceration rates for black and brown people in the US. Alexander cites the War on Drugs as one of the biggest causes of contemporary mass incarceration, and she uses police pretext stops as an example. In pretext stops, cops can pull over a "suspicious" driver on the pretext of a very minor traffic violation (e.g. turning on red, going over the speed limit) and then do a drug sweep of the car, which may result in an arrest for drug-related charges. According to a Pew Research Center survey, "Black adults are about five times as likely as whites to say they’ve been unfairly stopped by police because of their race or ethnicity." Given this background information on the criminal justice system, we would like to investigate if similar elements are at play in Durham, North Carolina.
 
-Our data is a census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country" (Stanford Policing Project). Our dataset, the "Durham" dataset in the Stanford Open Policing Project, records each observation as an individual police stop recorded in Durham between December 2001 and December 2015, and has `r ncol(police)` variables and 326024 observations. We would like to see if racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (primarily sex) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
+Our data is an attempted census of individual police stops in Durham created by the Stanford Open Policing project. The Stanford Open Policing Project "[collects] and [standardizes] data on vehicle and pedestrian stops from law enforcement departments across the country" (Stanford Policing Project). Our dataset, the "Durham" dataset in the Stanford Open Policing Project, records each observation as an individual police stop recorded in Durham between December 2001 and December 2015, and has `r ncol(police)` variables and 326024 observations. We would like to see if racial bias is evident in police stops in Durham. In doing so, we also wish to examine if other demographic characteristics (primarily sex) influence traffic stops. Our general research question is the following: what is the relationship between a subject's demographic attributes (primarily sex or race) and the likelihood of being stopped by police in traffic in Durham? 
 
 We hypothesize that race and the likelihood of being stopped by police in traffic in Durham are related, with black people representing disproportionately more of the people being stopped relative to their proportion within the population. We also hypothesize that sex has no significant relationship with being stopped in traffic. To find the true population proportions of people by race, sex, and age in Durham, we will utilize the 2010 Durham census data as markers for comparison. To match our census information, we will filter the Stanford Policing Project dataset to only include data from Durham County, exclude races that are inputted as "unknown" or "NA," and exclude ages that are inputted as "NA." In doing so, a total of 2881 observations are removed from the dataset, a value that should not substantially alter the results with `r nrow(police)` observations remaining. We will be doing our data analysis and sampling from the `r nrow(police)` observations.
 
@@ -115,17 +115,17 @@ To further visualize this trend, we used census data of population proportions b
 
 $~$
 
-```{r stop-rate-viz}
+```{r stop-rate-viz, fig.width = 5, fig.height = 3}
 ggplot(combined, aes(x = O, y = proportion, fill = subject_race)) + 
   geom_bar(stat = "identity", position = "fill", color = "white") + 
-  labs(title = "Expected vs Observed Proportions of People Stopped by Race", 
-       x = "Expected from 2010 Census vs Observed from Data",
+  labs(title = "Proportions of People Stopped by Race", 
+       subtitle = "Expected from 2010 Census vs Observed from Data",
        y = "Proportion", 
+       x = " ",
        fill = "Subject Race") +
   scale_fill_manual(values = c("#175676", "#4ba3c3", "#cce6f4", "#d62839", "#ba324f"),
                     labels = c("Asian/Pacific Islander", "Black",
-                               "Hispanic", "Other", "White")) +
-  theme(aspect.ratio = 0.6)
+                               "Hispanic", "Other", "White")) 
 ```
 
 $~$
@@ -303,7 +303,7 @@ This model yields a few key conclusions:
 
 3. Holding race and sex constant, for every additional year of age, we expect the odds of receiving a citation upon being stopped to multiply by `r exp(-0.007387004)`. The coefficient is also statistically significant (p-value < 0.01), indicating that the data does provide sufficient evidence that the driver's age and the likelihood of receiving a citation are associated (slope $\neq$ 0).
 
-4. Holding race and age constant, we expect the odds that a male person will receive a citation upon being stopped by police in Durham County to be `r exp(0.03228)` times the odds that a female person will receive a citation upon being stopped. This coefficient, however, is not statistically significant at the 1% level (p-value > 0.01).
+4. Holding age constant, we expect the odds that a white male  will receive a citation upon being stopped by police in Durham County to be `r exp(0.03228)` times the odds that a white female will receive a citation upon being stopped. This coefficient, however, is not statistically significant at the 1% level (p-value > 0.01).
 
 5. In most cases, the interaction variable between sex and race does not result in a statistically significant coefficient, the critical exception being the case of black people. Holding age and race constant, upon being stopped, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676 + 0.032)` times the odds that a black woman will receive a traffic citation upon being stopped (also factored in the nonsignificant "sex" variable by itself in odds calculation; without that coefficient, a black man's odds of receiving a citation are expected to be `r exp(-0.1206676)` times the odds that a black woman will receive a citation upon being stopped). Thus, unlike nearly every other race listed, black people are the only race where women are statistically significantly more likely to receive a citation upon being stopped. 
 
@@ -311,7 +311,7 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 ## Discussion
 
-Consistent with our original hypothesis on racial bias in police traffic stops in Durham, we have learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation--we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). Nonetheless, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's *The New Jim Crow: Mass Incarceration in the Age of Colorblindness*, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. There are significant practical implications of this investigation, as racial profiling within the policing system is a huge issue today. Discriminatory incarceration of black people in America severely harms black families, communities, capacity for political participation, etc. Hopefully, larger, more well-established and well-funded initiatives like the Stanford Open Policing Project are able to use similar research to advocate on behalf of criminal justice reform and police reform.
+Consistent with our original hypothesis on racial bias in police traffic stops in Durham County, we have learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation--we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). Nonetheless, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's *The New Jim Crow: Mass Incarceration in the Age of Colorblindness*, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. There are significant practical implications of this investigation, as racial profiling within the policing system is a huge issue today. Discriminatory incarceration of black people in America severely harms black families, communities, capacity for political participation, etc. Hopefully, larger, more well-established and well-funded initiatives like the Stanford Open Policing Project are able to use similar research to advocate on behalf of criminal justice reform and police reform.
 
 Through our research, contrary to our original hypothesis that sex would be associated with the likelihood of being stopped in traffic, we have learned that males are more likely to be stopped than females in Durham County when compared to the expected proportions found from the 2010 Census. Although there is a stereotype that women are worse drivers than men, the higher proportion of males being pulled over than females is in line with previous research that males tend to take more risks when driving than females. 
 
@@ -482,6 +482,8 @@ Conditions of Logistic Regression:
 1. Independence - Each traffic stop is independent of other traffic stops; one traffic stop resulting in a citation does not affect the likelihood that other traffic stops result in citations.
 
 2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, faceting by race and coloring by sex to isolate the linear predictor. The Linearity Assumption is met because there is a linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race and sex in this context) are held constant.
+
+3. Randomness - Representative of traffic stops - attempted census
 
 ```{r linearity1}
 data <- police %>% 
