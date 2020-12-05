@@ -124,11 +124,11 @@ $~$
 
 The chart provides some initial evidence for the hypothesis, indicating that a significantly greater proportion of black people were stopped compared to what was expected based on the proportion of black people in Durham County in the 2010 census. Within the "Results" section, we will run statistical tests to determine if the differences between expected and observed proportions were significant.
 
-To start exploring our second research question on citations, we visualized a segmented bar graph with the proportion of citations based on race below. 
+To begin exploring our second research question on citations, we visualized a segmented bar graph with the proportion of citations based on race below. 
 
 $~$
 
-```{r bargraph}
+```{r bargraph, fig.width = 7, fig.height = 3}
 ggplot(police, aes(x = subject_race, fill = citation_issued)) + 
   geom_bar(position = "fill") + 
   labs(title = "Likelihood of Citation Based on Race", 
@@ -142,20 +142,12 @@ ggplot(police, aes(x = subject_race, fill = citation_issued)) +
                               "Hispanic",
                               "Other",
                               "White")) +
-  theme(aspect.ratio = 0.6)
+  theme(aspect.ratio = 0.6, axis.text.x = element_text(size = 8)) 
 ```
 
 $~$
 
-According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued.
-
-To answer the first part of our research question on the relationship between race and the likelihood of being stopped in traffic by police, we conducted a hypothesis test using a simulation-based approach. We created null distributions for the proportion of stopped drivers separately based on race and on sex, and then compared these proportions with the census data on proportions of race and sex in Durham to test if there was any statistical difference.
-
-To answer the second part of our research question, on how race is related to receiving a citation after a traffic stop, we utilized the chi-squared test for independence. The chi-squared test for independence helps us find evidence for an association or lack of association between race and citation issued (the first chi-squared test) and sex and citation issued (the second chi-squared test) when race, sex, and citation issued are categorical variables.
-
-Within each chi-squared test, we compared observed versus the expected counts of a citation being issued based on race or sex if each $H_0$ were true. If these total differences are "large enough," then we would reject the null hypothesis. We performed each chi-squared test at the $\alpha = 0.05$ significance level.
-
-If we find that any two variables are associated in a significant manner, we will then engage in a logistic regression model to investigate the nature of the association, using the methods described in Appendix 1 to select the best model.
+According to the chart, it appears that Hispanics are the race with the highest proportion of citations issued. Surprisingly, black people appear to be the race with the lowest proportion of citations issued. We will further investigate the effect that race plays on the likelihood of receiving a citation by developing a logistic regression model in the second part of our "Results" section.
 
 ## Results
 
@@ -170,89 +162,13 @@ sample <- police %>%
 # Found code for sampling from https://stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame
 ```
 
-#### Exploring Race:
-We first investigated the research question regarding if race and sex demographics were proportionately (according to census proportions) stopped in traffic. Our exploratory data analysis for the true proportion of black people stopped in traffic indicated that black people appeared to be stopped at a disproportionately higher rate compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we created a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation:
+Our exploratory data analysis for the true proportion of black people stopped in traffic indicated that black people appeared to be stopped at a disproportionately higher rate compared to their proportion within the Durham County population. Since the attempted census of `r nrow(police)` observations is far too large to create a bootstrapped null distribution to check the statistical significance of the proportions, we created a stratified proportional sample of `r nrow(sample)` observations, roughly 1% of the original dataset. We decided to check if this difference between the observed and expected proportion (based on Durham County population) was statistically significant through simulation (see Appendix __ for details):
 
-Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
-
-$H_0: \rho = 0.369$. The true proportion of stopped drivers who were black within Durham County is equal to the true proportion of black people within Durham County (0.369).
-
-$H_A: \rho > 0.369$. The true proportion of stopped drivers who were black within Durham County is greater than the true proportion of black people within Durham County.
-
-$\alpha$ = 0.05
-
-```{r mutate-count}
-sample <- sample %>% 
-  mutate(B = case_when(
-    subject_race == "black" ~ "B",
-    subject_race != "black" ~ "Not B"
-  ))
-```
-
-```{r simulate-null}
-set.seed(400)
-null_dist1 <- sample %>% 
-  specify(response = B, success = "B") %>% 
-  hypothesize(null = "point", 
-              p = c("B" = 0.369, "Not B" = 0.631)) %>% 
-  generate(reps = num_rep, type = "simulate") %>% 
-  calculate(stat = "prop")
-```
-```{r obs-prop}
-obs_prop <- sample %>% 
-  specify(response = B, success = "B") %>% 
-  calculate(stat = "prop") %>% 
-  pull()
-```
-
-```{r calc-p-value}
-p <- null_dist1 %>% 
-  filter(stat >= obs_prop) %>% 
-  summarise(p = n()/nrow(null_dist1)) %>% 
-  pull()
-p
-```
-
-#### Conclusion:
-Because our p-value of `r round(p, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369). This indicates that black people are disproportionately stopped at a higher rate.
-
-```{r create-sample2}
-set.seed(145)
-sample2 <- police %>% 
-  group_by(subject_sex) %>% 
-  sample_frac(size = 0.01) %>% 
-  select(subject_sex)
-```
+We found that the data provides statistically significant evidence (at the 5% level) that black people are disproportionately more likely to be stopped in Durham County relative to their proportion within the population. The data is also practically significant as indicated by the comparison of stop rates in the EDA.
 
 ### Second Research Question (Demographic Factors and Likelihood of Citation)
 
-As a preliminary check to decide if further investigation is warranted, we first conducted a chi-squared test for independence. With a p-value of roughly 0, we found sufficient evidence to indicate the existence of an association between race and citation issued (See Appendix ___ for details). To investigate the nature of the association,
-
-APPENDIX #### Exploring Race:
-We then investigated the second element of our research question--the relationship between race and citation issued or sex and citation issued--and conducted a series of chi-squared tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
-
-$H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
-
-$H_A:$ Race and the likelihood of receiving a citation upon being stopped are associated.
-
-$\alpha$ = 0.05.
-
-```{r chisq}
-chi1 <- police %>% 
-  chisq_test(formula = citation_issued ~ subject_race)
-chi1
-```
-
-The chi-squared test for independence outputted a statistic of `r round(chi1$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 4 degrees of freedom.
-
-#### Conclusion:
-Since our p-value of `r round(chi1$p_value, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
-
-END APPENDIX
-
-### Logistic Regression Model for Likelihood of Citation
-
-By itself, the chi-squared test only provides evidence for the association of two variables but does not inform us of the exact nature of the association. In order to investigate the  nature of the association between race and the likelihood of receiving a citation, we created a logistic regression model. The logistic regression model has four variables to predict the log-odds of receiving a citation upon being stopped: The subject's race, the subject's age, the subject's sex, and an interaction variable between a subject's race and subject's sex (See Appendix 1 for the reasoning why this logistic regression model was chosen).
+As a preliminary check to decide if further investigation is warranted, we first conducted a chi-squared test for independence. With a p-value of roughly 0, we found sufficient evidence to indicate the existence of an association between race and citation issued (See Appendix 5 for details). We then created a logistic regression model to quantify the effect of race (adjusted for other demographic variables such as sex and age) on log-odds of receiving a citation. The logistic regression model contains four predictors: The subject's race, the subject's age, the subject's sex, and an interaction variable between a subject's race and subject's sex (See Appendix 1 for the reasoning why this logistic regression model was chosen).
 
 ```{r mutatestuff}
 police1 <- police %>% 
@@ -506,3 +422,68 @@ ggplot(data, aes(x = logit, y = subject_age, color = subject_sex)) +
 ```
 
 Conditions met. Proceed with a logistic regression model. 
+
+## Appendix 4
+
+Let $\rho$ equal the true proportion of stopped drivers who were black within Durham County. 
+
+$H_0: \rho = 0.369$. The true proportion of stopped drivers who were black within Durham County is equal to the true proportion of black people within Durham County (0.369).
+
+$H_A: \rho > 0.369$. The true proportion of stopped drivers who were black within Durham County is greater than the true proportion of black people within Durham County.
+
+$\alpha$ = 0.05
+
+```{r mutate-count}
+sample <- sample %>% 
+  mutate(B = case_when(
+    subject_race == "black" ~ "B",
+    subject_race != "black" ~ "Not B"
+  ))
+```
+
+```{r simulate-null}
+set.seed(400)
+null_dist1 <- sample %>% 
+  specify(response = B, success = "B") %>% 
+  hypothesize(null = "point", 
+              p = c("B" = 0.369, "Not B" = 0.631)) %>% 
+  generate(reps = num_rep, type = "simulate") %>% 
+  calculate(stat = "prop")
+```
+```{r obs-prop}
+obs_prop <- sample %>% 
+  specify(response = B, success = "B") %>% 
+  calculate(stat = "prop") %>% 
+  pull()
+```
+
+```{r calc-p-value}
+p <- null_dist1 %>% 
+  filter(stat >= obs_prop) %>% 
+  summarise(p = n()/nrow(null_dist1)) %>% 
+  pull()
+p
+```
+
+Because our p-value of `r round(p, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that the true proportion of people who are stopped within Durham County that are black is greater than the proportion of black people within the Durham County population (0.369). This indicates that black people are disproportionately stopped at a higher rate.
+
+## Appendix 5
+
+We conducted a chi-squared test of independence to determine if a person's race is associated with a higher chance of receiving a citation upon being stopped.
+
+$H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
+
+$H_A:$ Race and the likelihood of receiving a citation upon being stopped are associated.
+
+$\alpha$ = 0.05.
+
+```{r chisq}
+chi1 <- police %>% 
+  chisq_test(formula = citation_issued ~ subject_race)
+chi1
+```
+
+The chi-squared test for independence outputted a statistic of `r round(chi1$statistic, 3)`. The distribution of the test statistic is a chi-squared distribution, which is unimodal and right-skewed with 4 degrees of freedom.
+
+#### Conclusion:
+Since our p-value of `r round(chi1$p_value, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
