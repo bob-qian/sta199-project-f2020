@@ -234,7 +234,9 @@ sample2 <- police %>%
 
 ### Second Research Question (Demographic Factors and Likelihood of Citation)
 
-#### Exploring Race:
+As a preliminary check to decide if further investigation is warranted, we first conducted a chi-squared test for independence. With a p-value of roughly 0, we found sufficient evidence to indicate the existence of an association between race and citation issued (See Appendix ___ for details). To investigate the nature of the association,
+
+APPENDIX #### Exploring Race:
 We then investigated the second element of our research question--the relationship between race and citation issued or sex and citation issued--and conducted a series of chi-squared tests of independence to determine if a person's race or sex is associated with a higher chance of receiving a citation upon being stopped.
 
 $H_0:$ Race and the likelihood of receiving a citation upon being stopped are not associated.
@@ -253,6 +255,8 @@ The chi-squared test for independence outputted a statistic of `r round(chi1$sta
 
 #### Conclusion:
 Since our p-value of `r round(chi1$p_value, 3)` is less than our $\alpha$ of 0.05, we reject the null hypothesis. There is sufficient evidence to indicate that race and the likelihood of receiving a citation upon being stopped are associated.
+
+END APPENDIX
 
 ### Logistic Regression Model for Likelihood of Citation
 
