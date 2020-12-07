@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(tidyverse)
 library(infer)
 library(broom)
+library(Stat2Data)
 police <- read.csv("data/nc_durham_2020_04_01.csv")
 ```
 
@@ -20,7 +21,9 @@ police <- read.csv("data/nc_durham_2020_04_01.csv")
 police <- police %>% 
   filter(county_name == "Durham County") %>% 
   filter(subject_race != "unknown" & subject_race != "NA") %>% 
-  filter(subject_age != "NA") 
+  filter(subject_age != "NA") %>% 
+  mutate(subject_race = as.factor(subject_race)) %>% 
+  mutate(subject_sex = as.factor(subject_sex))
 num_rep <- 10000
 
 ```
@@ -393,33 +396,21 @@ Conditions of Logistic Regression:
 
 1. Independence - Each traffic stop is independent of other traffic stops; one traffic stop resulting in a citation does not affect the likelihood that other traffic stops result in citations.
 
-2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, faceting by race and coloring by sex to isolate the linear predictor. The Linearity Assumption is met because there is a linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race and sex in this context) are held constant.
+2. Linearity - Below, we have depicted scatterplots of the relationship between age and the log-odds of receiving a citation, controlling for race and sex. The Linearity Assumption is met because there is a roughly linear relationship between the age of a subject and the log-odds of receiving a citation when other predictors (race and sex in this context) are held constant.
 
-3. Randomness - Representative of traffic stops - attempted census
-
-```{r linearity1}
-data <- police %>% 
-  select(subject_age, subject_race, subject_sex)
-predictors <- colnames(data)
-data <- data %>% 
-  mutate(logit = log(probs / (1 - probs))) %>% 
-  slice(1:1000) #sliced 1 to 1000 because anything more than 1000 data points would overload R. Linear trends still hold beyond data point 1000.
+```{r emplogits, fig.width = 4, fig.height = 4}
+emplogitplot2(citation_issued ~ subject_age +subject_sex, 
+              data = police, ngroups = 10, putlegend = "bottomleft", 
+              main = "Empirical Logits vs Age by Sex")
+```
+```{r emplogits2, fig.width = 4, fig.height = 4}
+emplogitplot2(citation_issued ~ subject_age + subject_race, 
+              data = police, ngroups = 10, 
+              main = "Empirical Logits vs Age by Race")
+#legend removed bc it covers the graph
 ```
 
-```{r linearity2}
-ggplot(data, aes(x = logit, y = subject_age, color = subject_sex)) + 
-  facet_wrap(. ~ subject_race) +
-  geom_point(alpha = 0.5) + 
-  geom_smooth(method = "loess") + 
-  labs(title = "Subject Age vs Predicted Logits", 
-       subtitle = "Faceted by Race", 
-       x = "Predicted Logits", 
-       y = "Subject Age", 
-       color = "Subject Sex") + 
-  scale_color_manual(values=c('#ba324f', '#4ba3c3'))
-
-# Found code for assumption check from http://www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/ 
-```
+3. Randomness - We do not have reason to believe that the attempted census of police stops would have results that differ substantially with a full census of police stops.
 
 Conditions met. Proceed with a logistic regression model. 
 
