@@ -220,46 +220,31 @@ Appendix 2 further explores the trends of the relationship between traffic stops
 
 For most races, there is very little change in data between citations being given by sex. However, the odds that a black female will receive a citation are significantly greater than their male counterparts. This could possibly show unspoken discrimination against black females, an idea we believe necessitates further statistical analysis. A statistical exploration of stop rates of black females compared to black males and white females could illuminate the unique intersectional experiences faced by black females within America.
 
-A key limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. Specifically, the Stanford Policing Project data on race did not account for biracial people, people of other races, and did not detail what category white, black, or Asian Hispanics would fall under. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. 
+A key limitation of our data analysis was that the Stanford Policing Project separated races differently than the census data. Specifically, the Stanford Policing Project data on race did not account for biracial people, people of other races, and did not detail what category white, black, or Asian Hispanics would fall under. As a result, our proportions are slightly skewed. In the future we would attempt to match the categories over the different datasets. If we were able to standardize the groupings we would have less ambiguous data and more accurate proportions and conclusions. Another crucial limitation is that we are unable to establish if the trends we found were causally related. We are only able to take note of trends and cannot isolate causation; thus, our data does not provide conclusive evidence of racial discrimination by police.
 
-Another crucial limitation is that we are unable to establish if the trends we found were causally related. We are only able to take note of trends and cannot isolate causation; thus, our data does not provide conclusive evidence of racial discrimination by police.
+\newpage
 
 ## References
 
-**Michelle Alexander Book:**
-
 Alexander, Michelle. *The New Jim Crow: Mass Incarceration in the Age of Colourblindness*. Penguin Books, 2019. 
 
-**Stanford Policing Project:**
 
 Barghouty, Pheobe, et al. “The Stanford Open Policing Project.” Openpolicing.stanford.edu, 2020, openpolicing.stanford.edu/. 
 
-**Statistic for more black people incarcerated:**
 
 “Criminal Justice Facts.” The Sentencing Project, 2 Sept. 2020, www.sentencingproject.org/criminal-justice-facts/. 
 
-**Pew Research Study referenced in Introduction:**
 
 DeSilver, Drew, et al. “10 Things We Know about Race and Policing in the U.S.” Pew Research Center, Pew Research Center, 17 Aug. 2020, www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/. 
 
-**Meaning of AIC/BIC:**
-
-Mohammed, Emad A, and Behrouz H Far. “Akaike Information Criterion.” Akaike Information Criterion - an Overview | ScienceDirect Topics, 2015, www.sciencedirect.com/topics/medicine-and-dentistry/akaike-information-criterion. 
-
-**Study that Males are Riskier:**
 
 Rhodes, Nancy, et al. “Risky Driving among Young Male Drivers: The Effects of Mood and Passengers.” Transportation Research Part F: Traffic Psychology and Behaviour, Pergamon, 26 Dec. 2014, www.sciencedirect.com/science/article/pii/S1369847814001727.
 
-**2010 Durham Census:**
 
 “U.S. Census Bureau QuickFacts: Durham County, North Carolina.” Census Bureau QuickFacts, 2010, www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/RHI225219. 
 
-**Code** 
+\newpage
 
-Kassambara, and Michael U. “Logistic Regression Assumptions and Diagnostics in R.” STHDA, 11 Mar. 2018, www.sthda.com/english/articles/36-classification-methods-essentials/148-logistic-regression-assumptions-and-diagnostics-in-r/. 
-
- “Stratified Random Sampling from Data Frame.” Stack Overflow, 1 July 1963, stackoverflow.com/questions/23479512/stratified-random-sampling-from-data-frame. 
- 
 ## Appendix 1
 
 This appendix is devoted to showing why we chose the logistic regression model that we did. Utilizing the demographic characteristics of sex, race, and age, we attempted to create the most robust and explanatory model possible from the data. Below are the calculated AIC and BIC values for each model we considered. The model with the lowest AIC and BIC values was the one we chose, as it had the followed the principle of Occam's Razor the most faithfully (it explained the most in the least complex manner).
