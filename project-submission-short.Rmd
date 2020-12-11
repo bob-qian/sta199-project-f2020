@@ -212,11 +212,10 @@ The implications of this model will be further discussed in the "Discussion" sec
 
 ## Discussion
 
-Consistent with our original hypothesis on racial bias in police traffic stops in Durham County, we have learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Contrary to our hypothesis on racial bias in issuance of citations, however, we have found that black people are disproportionately less likely to receive a citation upon being stopped. Based on our data, we are unable to explain the difference in conclusions between our first and second research question; this may indicate a problem area for further statistical analysis.
+Throughout our analysis, we have learned that black people are disproportionately more likely to be stopped for a traffic violation. This stop rate is both statistically significant and practically relevant, with black people being stopped at a 2.5 times higher rate than white people. Contrary to our hypothesis on racial bias in issuance of citations, however, we have found that black people are disproportionately less likely to receive a citation upon being stopped. Based on our data, we are unable to explain the difference in conclusions between our first and second research question; this may indicate a problem area for further statistical analysis.
 
 Additionally, we found that Hispanics were the most likely to receive a citation upon being stopped. Unfortunately, our observational data cannot create a causal association between a person's race and the likelihood of being stopped or receiving a citation--we only have evidence that suggests statistically significant differences in proportion of black drivers being stopped (as opposed to their population percentage). Nonetheless, our data is consistent with the discussion on racial profiling and pretext stops in Michelle Alexander's *The New Jim Crow: Mass Incarceration in the Age of Colorblindness*, which indicates that black people are more likely to be stopped in traffic and that race does play a role in traffic penalties. There are significant practical implications of this investigation, as racial profiling within the policing system is a huge issue today. Discriminatory incarceration of black people in America severely harms black families, communities, capacity for political participation, etc. Hopefully, larger, more well-established and well-funded initiatives like the Stanford Open Policing Project are able to use similar research to advocate on behalf of criminal justice reform and police reform.
 
-Appendix 2 further explores the trends of the relationship between traffic stops and race over time. Overall, these visualizations show that policing trends by race have not dramatically changed over the time period from 2002 to 2015, which may indicate the enduring relevance of our conclusions today.
 
 For most races, there is very little change in data between citations being given by sex. However, the odds that a black female will receive a citation are significantly greater than their male counterparts. This could possibly show unspoken discrimination against black females, an idea we believe necessitates further statistical analysis. A statistical exploration of stop rates of black females compared to black males and white females could illuminate the unique intersectional experiences faced by black females within America.
 
@@ -239,7 +238,6 @@ Barghouty, Pheobe, et al. “The Stanford Open Policing Project.” Openpolicing
 “Criminal Justice Facts.” The Sentencing Project, 2 Sept. 2020, www.sentencingproject.org/criminal-justice-facts/. 
 
 **Pew Research Study referenced in Introduction:**
-
 DeSilver, Drew, et al. “10 Things We Know about Race and Policing in the U.S.” Pew Research Center, Pew Research Center, 17 Aug. 2020, www.pewresearch.org/fact-tank/2020/06/03/10-things-we-know-about-race-and-policing-in-the-u-s/. 
 
 **Meaning of AIC/BIC:**
